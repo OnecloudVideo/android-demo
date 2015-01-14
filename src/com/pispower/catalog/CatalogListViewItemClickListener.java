@@ -9,7 +9,7 @@ import com.pispower.video.VideoActivity;
 
 public class CatalogListViewItemClickListener implements
 		AdapterView.OnItemClickListener {
-	//场景对象
+	// 场景对象
 	private Context context;
 
 	/**
@@ -22,8 +22,8 @@ public class CatalogListViewItemClickListener implements
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view,
-			int position, long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
 		Intent intent = new Intent(this.context, VideoActivity.class);
 		CatalogInfo localVideoPackageInfo = (CatalogInfo) parent
 				.getItemAtPosition(position);

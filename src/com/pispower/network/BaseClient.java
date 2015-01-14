@@ -42,7 +42,6 @@ import android.util.Log;
 import com.pispower.util.MD5;
 import com.pispower.util.QueryString;
 
-
 public class BaseClient {
 
 	private static final String tag = BaseClient.class.getName();
@@ -73,8 +72,8 @@ public class BaseClient {
 	 * @param queryString
 	 * @return
 	 * @throws IOException
-	 * @throws JSONException 
-	 * @throws ParseException 
+	 * @throws JSONException
+	 * @throws ParseException
 	 */
 	public JSONObject get(final String apiContext, final QueryString queryString)
 			throws IOException, ParseException, JSONException {
@@ -89,11 +88,12 @@ public class BaseClient {
 	 * @param queryString
 	 * @return
 	 * @throws IOException
-	 * @throws JSONException 
-	 * @throws ParseException 
+	 * @throws JSONException
+	 * @throws ParseException
 	 */
 	public JSONObject post(final String apiContext,
-			final QueryString queryString) throws IOException, ParseException, JSONException {
+			final QueryString queryString) throws IOException, ParseException,
+			JSONException {
 		return excute(HttpPost.METHOD_NAME, apiContext, queryString);
 	}
 
@@ -286,9 +286,10 @@ public class BaseClient {
 
 		return URI.create(url);
 	}
-   
+
 	/**
 	 * 获取 DefaultHttpClient对象
+	 * 
 	 * @param context
 	 * @return DefaultHttpClient 对象
 	 */

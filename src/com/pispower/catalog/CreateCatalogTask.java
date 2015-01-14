@@ -35,23 +35,24 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 
 	@Override
 	protected CatalogInfo doInBackground(String... paramArrayOfString) {
-	    //获得新建分类的名字
+		// 获得新建分类的名字
 		String catalogName = paramArrayOfString[0];
-		//创建用于HTTP通信的客服端
+		// 创建用于HTTP通信的客服端
 		VideoClient videoClient = new VideoClient();
-		//创建分类信息实例对象
+		// 创建分类信息实例对象
 		CatalogInfo catalogInfo = new CatalogInfo();
 		try {
-			//创建分类通过VideoClient
-			JSONObject catalogJSONObject = videoClient.createCatalog(catalogName);
-		    //创建失败
+			// 创建分类通过VideoClient
+			JSONObject catalogJSONObject = videoClient
+					.createCatalog(catalogName);
+			// 创建失败
 			if (catalogJSONObject == null) {
 				return null;
 			}
 			catalogInfo.setId(catalogJSONObject.getString("id"));
 			catalogInfo.setName(catalogJSONObject.getString("name"));
 
-			//通过VideoClient来获取指定id分类的信息
+			// 通过VideoClient来获取指定id分类的信息
 			JSONObject specialCatalogJSONObject = videoClient
 					.getCatalog(catalogJSONObject.getString("id"));
 			if (specialCatalogJSONObject == null) {
@@ -70,19 +71,19 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 
 	@Override
 	protected void onPostExecute(CatalogInfo catalogInfo) {
-		//失败
+		// 失败
 		if (catalogInfo == null) {
 			Toast.makeText(this.context,
 					this.resources.getString(R.string.createCatalogFail),
 					Toast.LENGTH_LONG).show();
 			return;
 		}
-		//成功，更新相应的ListView
+		// 成功，更新相应的ListView
 		CatalogListViewAdapter localVideoPackageListAdapter = (CatalogListViewAdapter) this.listView
 				.getAdapter();
 		localVideoPackageListAdapter.addData(catalogInfo, 0);
 		localVideoPackageListAdapter.notifyDataSetChanged();
-		
+
 		Toast.makeText(this.context,
 				this.resources.getString(R.string.createCatalogSuccess),
 				Toast.LENGTH_LONG).show();

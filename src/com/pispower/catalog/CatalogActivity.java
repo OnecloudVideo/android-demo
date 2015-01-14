@@ -42,8 +42,9 @@ public class CatalogActivity extends Activity {
 		this.listView = ((ListView) findViewById(R.id.catalogListView));
 		this.listEmptyHintTextView = ((TextView) findViewById(R.id.emptyHint));
 		this.listView.setEmptyView(this.listEmptyHintTextView);
-		this.listView.setOnItemClickListener(new CatalogListViewItemClickListener(
-				this));
+		this.listView
+				.setOnItemClickListener(new CatalogListViewItemClickListener(
+						this));
 		// 开启异步任务，用于从亦云视频下载视频分类
 		new LoadCatalogTask(this.progressDialog, this.listView,
 				this.listEmptyHintTextView, this).execute(new Void[] { null,
@@ -60,7 +61,7 @@ public class CatalogActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem paramMenuItem) {
 		switch (paramMenuItem.getItemId()) {
 		case android.R.id.home:
-			//回到父activity
+			// 回到父activity
 			NavUtils.navigateUpFromSameTask(this);
 		case R.id.action_settings:
 		default:

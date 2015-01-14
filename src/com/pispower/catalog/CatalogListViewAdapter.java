@@ -24,7 +24,8 @@ public class CatalogListViewAdapter extends BaseAdapter {
 	 * @param catalogInfos
 	 * @param context
 	 */
-	public CatalogListViewAdapter(List<CatalogInfo> catalogInfos, Context context) {
+	public CatalogListViewAdapter(List<CatalogInfo> catalogInfos,
+			Context context) {
 		this.catalogInfos = catalogInfos;
 		this.context = context;
 	}
@@ -49,7 +50,6 @@ public class CatalogListViewAdapter extends BaseAdapter {
 		this.catalogInfos.add(position, catlogInfo);
 	}
 
-	
 	/**
 	 * 设置分类信息列表
 	 * 
@@ -58,7 +58,7 @@ public class CatalogListViewAdapter extends BaseAdapter {
 	public void setDataList(List<CatalogInfo> catalogInfos) {
 		this.catalogInfos = catalogInfos;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return this.catalogInfos.size();
@@ -78,7 +78,7 @@ public class CatalogListViewAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View localView = null;
 		if (convertView == null) {
-			//通过LayoutInflater来获得layout view
+			// 通过LayoutInflater来获得layout view
 			localView = ((LayoutInflater) this.context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 					.inflate(R.layout.catalog_list_item, parent, false);
@@ -105,10 +105,9 @@ public class CatalogListViewAdapter extends BaseAdapter {
 		return localView;
 
 	}
-   
+
 	/*
 	 * 用来保存所需的view对象，防止每次都需生成新的view对象，用于getView方法中
-	 * 
 	 */
 	static class ViewHolder {
 		protected TextView holdVideoNums;

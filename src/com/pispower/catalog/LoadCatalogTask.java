@@ -87,7 +87,7 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 		if (this.progressDialog.isShowing()) {
 			this.progressDialog.dismiss();
 		}
-		//为ListView设置Adapter
+		// 为ListView设置Adapter
 		CatalogListViewAdapter listViewAdapter = null;
 		if ((!isCancelled()) && (paramList != null)) {
 			this.listViewEmptyHintTextView.setText(R.string.noAnyVideos);
