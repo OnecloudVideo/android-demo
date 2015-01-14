@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.pispower.R;
 import com.pispower.catalog.CatalogActivity;
+import com.pispower.util.NetworkInspection;
 
 public class StartActivity extends Activity {
 
@@ -31,8 +33,13 @@ public class StartActivity extends Activity {
 	 * @param view
 	 */
 	public void startDemo(View view) {
-		Intent intent = new Intent(this, CatalogActivity.class);
-		this.startActivity(intent);
+		if (NetworkInspection.isExistingAnyNetwork(this)) {
+			Intent intent = new Intent(this, CatalogActivity.class);
+			this.startActivity(intent);
+		} else {
+			Toast.makeText(this, "不存在网络连接，请检查", Toast.LENGTH_LONG).show();
+		}
+
 	}
 
 	@Override
