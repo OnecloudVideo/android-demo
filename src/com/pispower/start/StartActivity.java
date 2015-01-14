@@ -10,10 +10,8 @@ import android.view.View;
 import com.pispower.R;
 import com.pispower.catalog.CatalogActivity;
 
-
 public class StartActivity extends Activity {
 
- 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,12 +24,12 @@ public class StartActivity extends Activity {
 		getMenuInflater().inflate(R.menu.start, menu);
 		return true;
 	}
-	
-    /**
-     * 响应按钮点击事件的方法，此方法用来启动一个新的Activity
-     * 
-     * @param view
-     */
+
+	/**
+	 * 响应按钮点击事件的方法，此方法用来启动一个新的Activity
+	 * 
+	 * @param view
+	 */
 	public void startDemo(View view) {
 		Intent intent = new Intent(this, CatalogActivity.class);
 		this.startActivity(intent);
