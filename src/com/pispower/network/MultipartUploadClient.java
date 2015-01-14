@@ -79,12 +79,14 @@ public class MultipartUploadClient {
 		message.what = UploadStatus.UploadFail.ordinal();
 		handler.sendMessage(message);
 	}
-   /**
-    * 有参构造方法
-    * @param uploadFile
-    * @param tempDir
-    * @param handler
-    */
+
+	/**
+	 * 有参构造方法
+	 * 
+	 * @param uploadFile
+	 * @param tempDir
+	 * @param handler
+	 */
 	public MultipartUploadClient(File uploadFile, File tempDir, Handler handler) {
 		super();
 		this.file = uploadFile;

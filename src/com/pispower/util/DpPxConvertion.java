@@ -3,14 +3,14 @@ package com.pispower.util;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-
 public class DpPxConvertion {
-    /**
-     * 把dip值转换为pix像素值
-     * @param dp
-     * @param context
-     * @return 像素
-     */
+	/**
+	 * 把dip值转换为pix像素值
+	 * 
+	 * @param dp
+	 * @param context
+	 * @return 像素
+	 */
 	public static int dpToPx(int dp, Context context) {
 		DisplayMetrics displayMetrics = context.getResources()
 				.getDisplayMetrics();

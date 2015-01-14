@@ -17,20 +17,20 @@ import com.pispower.R;
 import com.pispower.util.DpPxConvertion;
 import com.pispower.util.MediaUtil;
 
- 
 public class VideoListAdapter extends BaseAdapter {
-    
-	//视频信息列表
+
+	// 视频信息列表
 	private List<VideoInfo> videoInfoList;
-    
-	//LayoutInflater 对象
+
+	// LayoutInflater 对象
 	private LayoutInflater layoutInflater;
-    
-	//场景对象
+
+	// 场景对象
 	private Context context;
 
 	/**
 	 * 有参构造方法
+	 * 
 	 * @param videoInfoList
 	 * @param context
 	 */
@@ -100,20 +100,22 @@ public class VideoListAdapter extends BaseAdapter {
 		} else {
 			setProgressBarProcess(videoInfo, view, holder);
 		}
-		String fileName=videoInfoList.get(position).getName();
-		if(fileName.length()>20){
-			fileName=fileName.substring(fileName.length()-20);
+		String fileName = videoInfoList.get(position).getName();
+		if (fileName.length() > 20) {
+			fileName = fileName.substring(fileName.length() - 20);
 		}
-		if(MediaUtil.isAudioFileType(fileName)){
-			holder.videoImage.setImageDrawable(context.getResources().getDrawable(R.drawable.v_audio));
-		}else{
-			holder.videoImage.setImageDrawable(context.getResources().getDrawable(R.drawable.v_video));
+		if (MediaUtil.isAudioFileType(fileName)) {
+			holder.videoImage.setImageDrawable(context.getResources()
+					.getDrawable(R.drawable.v_audio));
+		} else {
+			holder.videoImage.setImageDrawable(context.getResources()
+					.getDrawable(R.drawable.v_video));
 		}
 		holder.name.setText(fileName);
 		holder.status.setText(videoInfoList.get(position).getStatus());
 		return view;
 	}
-   
+
 	/*
 	 * 设置ViewHolder
 	 */
@@ -131,7 +133,7 @@ public class VideoListAdapter extends BaseAdapter {
 
 		setViewHoldView(videoInfo, view, viewHolder, progressBar);
 	}
- 
+
 	/*
 	 * 设置viewHolder 中的view
 	 */
@@ -163,10 +165,9 @@ public class VideoListAdapter extends BaseAdapter {
 			holder.size.setText(videoInfoList.get(position).getSize());
 		}
 	}
-  
+
 	/*
 	 * 设置ProgressBar的process
-	 * 
 	 */
 	private void setProgressBarProcess(VideoInfo videoInfo,
 			RelativeLayout view, ViewHolder holder) {
@@ -182,7 +183,7 @@ public class VideoListAdapter extends BaseAdapter {
 					.getCurrentValue());
 		}
 	}
-    
+
 	/*
 	 * 创建TextView
 	 */
@@ -219,24 +220,26 @@ public class VideoListAdapter extends BaseAdapter {
 		progressBar.setLayoutParams(params);
 		return progressBar;
 	}
-  
+
 	/**
 	 * 获取视频信息列表
+	 * 
 	 * @return
 	 */
 	public List<VideoInfo> getVideoInfoList() {
 		return videoInfoList;
 	}
-  
+
 	/**
 	 * 设置视频信息列表
+	 * 
 	 * @param videoInfoList
 	 */
 	public void setVideoInfoList(List<VideoInfo> videoInfoList) {
 		this.videoInfoList = videoInfoList;
 	}
 
-	//用来保存所需的View
+	// 用来保存所需的View
 	static class ViewHolder {
 		protected ImageView videoImage;
 		protected TextView name;

@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
- 
 public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 
 	private static final String TAG = "LoadVideoTask";
@@ -71,26 +70,26 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 				VideoInfo videoInfo = new VideoInfo();
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				videoInfo.setId(jsonObject.getString("id"));
-				String fileName=jsonObject.getString("name");
+				String fileName = jsonObject.getString("name");
 				videoInfo.setName(fileName);
 				videoInfo.setSize("100MB");
 				String status = jsonObject.getString("status");
 				videoInfo.setStatus(status);
 				if (status.equals("FINISH")) {
-					if(MediaUtil.isAudioFileType(fileName)){
+					if (MediaUtil.isAudioFileType(fileName)) {
 						String embedCode = videoClient.getVideoEmbedCode(
 								jsonObject.getString("id"),
 								resources.getString(R.string.audioClarity));
-						videoInfo
-								.setUrl(videoClient.getUrlFromEmbedCode(embedCode));	
-					}else{
+						videoInfo.setUrl(videoClient
+								.getUrlFromEmbedCode(embedCode));
+					} else {
 						String embedCode = videoClient.getVideoEmbedCode(
 								jsonObject.getString("id"),
 								resources.getString(R.string.clarity));
-						videoInfo
-								.setUrl(videoClient.getUrlFromEmbedCode(embedCode));
+						videoInfo.setUrl(videoClient
+								.getUrlFromEmbedCode(embedCode));
 					}
-				
+
 				} else {
 					videoInfo.setUrl(null);
 				}

@@ -105,6 +105,7 @@ public class SimpleMultipartEntity implements HttpEntity {
 
 	/**
 	 * 添加一个file part
+	 * 
 	 * @param key
 	 * @param fileName
 	 * @param fin

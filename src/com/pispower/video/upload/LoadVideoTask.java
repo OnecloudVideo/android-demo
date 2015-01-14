@@ -18,19 +18,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
-/*
- * File Name  : LoadVideoTask.java
- * Authors    : tanyb
- * Stage      : Implementation
- * Created    :  上午10:46:40
- * Copyright  : Copyright 2009 OneCloud Co., Ltd.  All rights reserved.
- *
- * This software is the confidential and proprietary information of 
- * OneCloud Co., Ltd. ("Confidential Information").  You shall not
- * disclose such Confidential Information and shall use it only in
- * accordance with the terms of the license agreement you entered into
- * with OneCloud.
- */
 public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 
 	private static final String TAG = "LoadVideoTask";
@@ -85,26 +72,26 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 				VideoInfo videoInfo = new VideoInfo();
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				videoInfo.setId(jsonObject.getString("id"));
-				String fileName=jsonObject.getString("name");
+				String fileName = jsonObject.getString("name");
 				videoInfo.setName(fileName);
 				videoInfo.setSize("100MB");
 				String status = jsonObject.getString("status");
 				videoInfo.setStatus(status);
 				if (status.equals("FINISH")) {
-					if(MediaUtil.isAudioFileType(fileName)){
+					if (MediaUtil.isAudioFileType(fileName)) {
 						String embedCode = videoClient.getVideoEmbedCode(
 								jsonObject.getString("id"),
 								resources.getString(R.string.audioClarity));
-						videoInfo
-								.setUrl(videoClient.getUrlFromEmbedCode(embedCode));	
-					}else{
+						videoInfo.setUrl(videoClient
+								.getUrlFromEmbedCode(embedCode));
+					} else {
 						String embedCode = videoClient.getVideoEmbedCode(
 								jsonObject.getString("id"),
 								resources.getString(R.string.clarity));
-						videoInfo
-								.setUrl(videoClient.getUrlFromEmbedCode(embedCode));
+						videoInfo.setUrl(videoClient
+								.getUrlFromEmbedCode(embedCode));
 					}
-				
+
 				} else {
 					videoInfo.setUrl(null);
 				}

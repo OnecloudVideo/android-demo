@@ -2,7 +2,6 @@ package com.pispower.video;
 
 import com.pispower.video.upload.UploadInfo;
 
- 
 public class VideoInfo {
 
 	// 视频id
@@ -64,6 +63,7 @@ public class VideoInfo {
 
 	/**
 	 * 获取id
+	 * 
 	 * @return id
 	 */
 	public String getId() {
@@ -71,14 +71,14 @@ public class VideoInfo {
 	}
 
 	/**
-	 * 设置id 
+	 * 设置id
 	 * 
 	 * @param id
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
-    
+
 	/**
 	 * 获取名字
 	 * 
@@ -89,60 +89,65 @@ public class VideoInfo {
 	}
 
 	/**
-	 *设置名字
+	 * 设置名字
 	 * 
 	 * @param name
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-   
+
 	/**
 	 * 获取大小
+	 * 
 	 * @return size
 	 */
 	public String getSize() {
 		return size;
 	}
-	
 
 	/**
 	 * 
 	 * 设置大小
+	 * 
 	 * @param size
 	 */
 	public void setSize(String size) {
 		this.size = size;
 	}
-   
+
 	/**
 	 * 
 	 * 获取状态
+	 * 
 	 * @return status
 	 */
 	public String getStatus() {
 		return status;
 	}
-  
+
 	/**
 	 * 
 	 * 设置状态
+	 * 
 	 * @param status
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-   
+
 	/**
 	 * 获取url
+	 * 
 	 * @return url
 	 */
 	public String getUrl() {
 		return url;
 	}
-   
+
 	/**
 	 * 设置url
+	 * 
 	 * @param url
 	 */
 	public void setUrl(String url) {

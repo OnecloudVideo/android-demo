@@ -17,23 +17,25 @@ import android.widget.MediaController;
 import com.pispower.R;
 import com.pispower.video.VideoView;
 
-public class PlayActivity extends Activity implements MediaPlayer.OnErrorListener,MediaPlayer.OnPreparedListener {
+public class PlayActivity extends Activity implements
+		MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener {
 
 	private VideoView videoView;
 	private ProgressDialog progressDialog;
-    private Resources resources;
-	
+	private Resources resources;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("onCreate", "onCreate is called");
 		super.onCreate(savedInstanceState);
-		resources=getResources();
+		resources = getResources();
 		// 创建进度对话框
-		progressDialog = ProgressDialog.show(this, resources.getString(R.string.loading), resources.getString(R.string.loadDescription));
-//		progressDialog.setCanceledOnTouchOutside(false);
-//		// 显示进度对话框
-//		progressDialog.show();
+		progressDialog = ProgressDialog.show(this,
+				resources.getString(R.string.loading),
+				resources.getString(R.string.loadDescription));
+		// progressDialog.setCanceledOnTouchOutside(false);
+		// // 显示进度对话框
+		// progressDialog.show();
 
 		// 设置窗口为无标题窗口
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -76,36 +78,34 @@ public class PlayActivity extends Activity implements MediaPlayer.OnErrorListene
 		progressDialog.dismiss();
 		videoView.stopPlayback();
 
-		AlertDialog.Builder bulider = new AlertDialog.Builder(
-				PlayActivity.this);
+		AlertDialog.Builder bulider = new AlertDialog.Builder(PlayActivity.this);
 		bulider.setCancelable(false);
-		bulider.setMessage(resources.getString(R.string.playError)).setTitle(resources.getString(R.string.playErrorTitle));
+		bulider.setMessage(resources.getString(R.string.playError)).setTitle(
+				resources.getString(R.string.playErrorTitle));
 
-		bulider.setPositiveButton(resources.getString(R.string.playActivityDialogButton),
+		bulider.setPositiveButton(
+				resources.getString(R.string.playActivityDialogButton),
 				new DialogInterface.OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog,
-							int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						PlayActivity.this.finish();
 					}
 				});
 		bulider.show();
 		return true;
-	
+
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// 从屏幕上移除进度对话框
-		if(progressDialog.isShowing()){
+		if (progressDialog.isShowing()) {
 			progressDialog.dismiss();
 		}
 		// 开始播放视频
 		videoView.start();
 	}
-
-	
 
 }

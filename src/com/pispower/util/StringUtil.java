@@ -1,8 +1,7 @@
 package com.pispower.util;
 
- 
 public class StringUtil {
-	
+
 	/**
 	 * 检测输入的字符串是否是空白字符串包括为null的字符串，是返回爲true，否返回false
 	 * 

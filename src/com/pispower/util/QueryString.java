@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
- 
 public class QueryString {
 
 	private final Map<String, String[]> paramMap = new LinkedHashMap<String, String[]>();
@@ -151,9 +150,10 @@ public class QueryString {
 		}
 		return sortedParamMap;
 	}
-   
+
 	/**
 	 * 获取key-parameter对的map对象
+	 * 
 	 * @return
 	 */
 	public Map<String, String> getSingleValueParamMap() {
@@ -166,6 +166,7 @@ public class QueryString {
 
 	/**
 	 * 获取所有的所有的key值
+	 * 
 	 * @return
 	 */
 	public Enumeration<String> getParamNames() {

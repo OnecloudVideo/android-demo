@@ -5,14 +5,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-
 public class ContentUriFileConvertion {
 
 	private static final String TAG = "ContentUriFileConvertion";
 
 	/**
 	 * 把Conent形式的Uri转换为字符串
-	 *
+	 * 
 	 * 
 	 * @param uri
 	 * @param context

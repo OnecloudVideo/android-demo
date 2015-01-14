@@ -1,6 +1,5 @@
 package com.pispower.video.upload;
 
- 
 public enum UploadStatus {
 	/**
 	 * 上传开始

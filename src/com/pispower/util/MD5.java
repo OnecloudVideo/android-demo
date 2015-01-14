@@ -79,25 +79,25 @@ public class MD5 {
 	// }
 	// return md5;
 	// }
-//	/**
-//	 * 获取输入文件的MD5值
-//	 * 
-//	 * @param file
-//	 * @return
-//	 * @throws IOException
-//	 * @throws NoSuchAlgorithmException
-//	 */
-//	public static String getFileMd5String(File file) throws IOException,
-//			NoSuchAlgorithmException {
-//		MessageDigest md5 = MessageDigest.getInstance(MD5);
-//		FileInputStream fileInputStream = new FileInputStream(file);
-//		FileChannel fileChannel = fileInputStream.getChannel();
-//		MappedByteBuffer buffer = fileChannel.map(MapMode.READ_ONLY, 0,
-//				file.length());
-//		md5.update(buffer);
-//		fileChannel.close();
-//		fileInputStream.close();
-//		return bytesToHexString(md5.digest());
-//	}
+	// /**
+	// * 获取输入文件的MD5值
+	// *
+	// * @param file
+	// * @return
+	// * @throws IOException
+	// * @throws NoSuchAlgorithmException
+	// */
+	// public static String getFileMd5String(File file) throws IOException,
+	// NoSuchAlgorithmException {
+	// MessageDigest md5 = MessageDigest.getInstance(MD5);
+	// FileInputStream fileInputStream = new FileInputStream(file);
+	// FileChannel fileChannel = fileInputStream.getChannel();
+	// MappedByteBuffer buffer = fileChannel.map(MapMode.READ_ONLY, 0,
+	// file.length());
+	// md5.update(buffer);
+	// fileChannel.close();
+	// fileInputStream.close();
+	// return bytesToHexString(md5.digest());
+	// }
 
 }

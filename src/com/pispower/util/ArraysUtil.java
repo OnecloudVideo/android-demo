@@ -2,10 +2,9 @@ package com.pispower.util;
 
 import java.lang.reflect.Array;
 
-
 public class ArraysUtil {
 	/**
-	 *添加元素到指定的数组对象中
+	 * 添加元素到指定的数组对象中
 	 * 
 	 * @param array
 	 * @param element

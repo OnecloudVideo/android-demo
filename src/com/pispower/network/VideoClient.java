@@ -27,10 +27,6 @@ import android.util.Log;
 
 import com.pispower.util.QueryString;
 
-/**
- * This class is used for
- * 
- */
 public class VideoClient {
 
 	private static final String Tag = VideoClient.class.getName();
@@ -198,6 +194,7 @@ public class VideoClient {
 
 	/**
 	 * 从EmbedCode中获得url
+	 * 
 	 * @param embedCode
 	 * @return 字符串
 	 */

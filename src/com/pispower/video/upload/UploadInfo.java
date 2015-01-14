@@ -1,6 +1,5 @@
 package com.pispower.video.upload;
 
- 
 public class UploadInfo {
 	// 上传状态的枚举UploadStatus对象
 	private UploadStatus uploadStatus;
@@ -60,6 +59,7 @@ public class UploadInfo {
 
 	/**
 	 * 设置当前值
+	 * 
 	 * @param currentValue
 	 */
 	public void setCurrentValue(int currentValue) {
@@ -68,6 +68,7 @@ public class UploadInfo {
 
 	/**
 	 * 获取最大值
+	 * 
 	 * @return maxValue
 	 */
 	public int getMaxValue() {
@@ -76,6 +77,7 @@ public class UploadInfo {
 
 	/**
 	 * 设置最大值
+	 * 
 	 * @param maxValue
 	 */
 	public void setMaxValue(int maxValue) {

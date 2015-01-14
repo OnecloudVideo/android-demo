@@ -1,16 +1,10 @@
 package com.pispower.util;
 
- 
 import java.util.HashMap;
 import java.util.Iterator;
 
 import android.annotation.SuppressLint;
 
-/**
- * MediaScanner helper class.
- * 
- * {@hide}
- */
 public class MediaUtil {
 
 	// comma separated list of all file extensions supported by the media
@@ -192,6 +186,7 @@ public class MediaUtil {
 
 	/**
 	 * 获取文件的类型
+	 * 
 	 * @param path
 	 * @return MediaFileType对象
 	 */
@@ -202,9 +197,10 @@ public class MediaUtil {
 			return null;
 		return sFileTypeMap.get(path.substring(lastDot + 1).toUpperCase());
 	}
-   
+
 	/**
 	 * 获取文件的类型
+	 * 
 	 * @param mimeType
 	 * @return int 数据
 	 */

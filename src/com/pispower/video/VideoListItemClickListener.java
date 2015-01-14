@@ -13,7 +13,6 @@ import com.pispower.R;
 import com.pispower.video.VideoInfo;
 import com.pispower.video.play.PlayActivity;
 
- 
 public class VideoListItemClickListener implements OnItemClickListener {
 
 	// 场景对象
