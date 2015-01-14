@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="audioClarity">标准</string>
+    <string name="clarity">标清</string>
+    <string name="uploadVideoDescription">上传一个视频</string>
+    <string name="videoImageViewDescription">video or audio image</string>
+    <string name="videoStatusText">status</string>
+    <string name="videoNameText">name</string>
+    <string name="title_activity_video">VideoActivity</string>
+    <string name="videoListEmpty">此文件夹不包含任何的视频文件</string>
+    <string name="videoListLoadError">加载出错</string>
+    <string name="videoUploadSuccess">上传成功</string>
+    <string name="videoUploadFail">上传失败</string>
+    <string name="existVideoUploading">正在上传视频，请稍后</string>
+
+</resources>

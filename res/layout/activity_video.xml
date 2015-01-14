@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pispower.video.VideoActivity" >
+
+    <ListView
+        android:id="@+id/videoList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/videoUploadButton"
+        android:layout_alignParentTop="true" >
+
+    </ListView>
+    <TextView
+        android:id="@+id/videoEmptyHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </TextView>
+    <ImageButton
+        android:id="@+id/videoUploadButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="uploadVideo"
+        android:layout_alignLeft="@+id/videoList"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/uploadVideoDescription"
+        android:src="@drawable/upload_press"      
+         />
+
+</RelativeLayout>

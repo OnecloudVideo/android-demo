@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="imageButtonDescription">create new catalog</string>
+    <string name="loadError">加载出错</string>
+    <string name="createCatalogFail">创建失败</string>
+    <string name="createCatalogSuccess">创建成功</string>
+    <string name="catalogImageDescription">video catalog image</string>
+    <string name="catalogNameHint">catalog Name</string>
+    <string name="catalogModificationTimeHint">modification Time</string>
+    <string name="catalogContainsVideoNumsHint">videoNums</string>
+    <string name="addFileImageViewDescription">add file</string>
+    <string name="addFileEditViewHint">file name</string>
+    <string name="title_activity_video_management">视频管理</string>
+    <string name="add_file_dialog_add_button">添加</string>
+    <string name="add_file_dialog_cancel_button">取消</string>
+    <string name="noAnyVideos">不包含任何的视频文件</string>
+    <string name="zero">0</string>
+
+</resources>

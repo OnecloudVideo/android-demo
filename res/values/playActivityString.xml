@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="play">play</string>
+    <string name="Referer">www.onecloud.pispower.com</string>
+    <string name="playError">播放出错</string>
+    <string name="playErrorTitle">出错</string>
+    <string name="playActivityDialogButton">返回</string>
+    <string name="playVideo">您是否要播放此文件</string>
+    <string name="playYes">是</string>
+    <string name="playNo">否</string>
+    <string name="ok">确定</string>
+    <string name="statusError">状态不对或播放地址为空，不能播放</string>
+</resources>
