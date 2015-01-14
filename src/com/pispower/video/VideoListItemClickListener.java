@@ -8,8 +8,10 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.pispower.R;
+import com.pispower.util.NetworkInspection;
 import com.pispower.video.VideoInfo;
 import com.pispower.video.play.PlayActivity;
 
@@ -57,9 +59,16 @@ public class VideoListItemClickListener implements OnItemClickListener {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						Intent intent = new Intent(context, PlayActivity.class);
-						intent.putExtra("playUri", videoPlayList.getUrl());
-						context.startActivity(intent);
+						if (NetworkInspection.isExistingAnyNetwork(context)) {
+							Intent intent = new Intent(context,
+									PlayActivity.class);
+							intent.putExtra("playUri", videoPlayList.getUrl());
+							context.startActivity(intent);
+						} else {
+							Toast.makeText(context, R.string.noAnyNetworks,
+									Toast.LENGTH_LONG).show();
+						}
+
 					}
 				});
 

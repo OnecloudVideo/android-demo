@@ -47,6 +47,7 @@ public class CatalogActivity extends Activity {
 		this.listView
 				.setOnItemClickListener(new CatalogListViewItemClickListener(
 						this));
+		
 		// 开启异步任务，用于从亦云视频下载视频分类
 		new LoadCatalogTask(this.progressDialog, this.listView,
 				this.listEmptyHintTextView, this).execute(new Void[] { null,
@@ -74,14 +75,14 @@ public class CatalogActivity extends Activity {
 	public void createCatalog(View paramView) {
 		// 创建对话框
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-		final View localView = this.inflater.inflate(R.layout.add_file, null);
-		dialogBuilder.setView(localView);
+		final View view = this.inflater.inflate(R.layout.add_file, null);
+		dialogBuilder.setView(view);
 		dialogBuilder.setPositiveButton(R.string.add_file_dialog_add_button,
 				new DialogInterface.OnClickListener() {
 					public void onClick(
 							DialogInterface paramAnonymousDialogInterface,
 							int paramAnonymousInt) {
-						String str = ((EditText) localView
+						String str = ((EditText) view
 								.findViewById(R.id.addfileName)).getText()
 								.toString();
 						// 开启异步任务，用于创建视频分类

@@ -37,7 +37,7 @@ public class StartActivity extends Activity {
 			Intent intent = new Intent(this, CatalogActivity.class);
 			this.startActivity(intent);
 		} else {
-			Toast.makeText(this, "不存在网络连接，请检查", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.noAnyNetworks, Toast.LENGTH_LONG).show();
 		}
 
 	}

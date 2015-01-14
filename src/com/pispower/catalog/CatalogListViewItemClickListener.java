@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
+import com.pispower.R;
+import com.pispower.util.NetworkInspection;
 import com.pispower.video.VideoActivity;
 
 public class CatalogListViewItemClickListener implements
@@ -24,11 +27,16 @@ public class CatalogListViewItemClickListener implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent(this.context, VideoActivity.class);
-		CatalogInfo localVideoPackageInfo = (CatalogInfo) parent
-				.getItemAtPosition(position);
-		intent.putExtra("catalogId", localVideoPackageInfo.getId());
-		intent.putExtra("folderName", localVideoPackageInfo.getName());
-		this.context.startActivity(intent);
+		if (NetworkInspection.isExistingAnyNetwork(context)) {
+			Intent intent = new Intent(this.context, VideoActivity.class);
+			CatalogInfo localVideoPackageInfo = (CatalogInfo) parent
+					.getItemAtPosition(position);
+			intent.putExtra("catalogId", localVideoPackageInfo.getId());
+			intent.putExtra("folderName", localVideoPackageInfo.getName());
+			this.context.startActivity(intent);
+		} else {
+           Toast.makeText(context, R.string.noAnyNetworks, Toast.LENGTH_LONG).show();
+		}
+
 	}
 }

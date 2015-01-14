@@ -27,8 +27,7 @@
         </activity>
         <activity
             android:name=".catalog.CatalogActivity"
-            android:label="@string/title_activity_video_management"
-            >
+            android:label="@string/title_activity_video_management" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pispower.start.StartActivity" >
@@ -36,8 +35,7 @@
         </activity>
         <activity
             android:name=".video.VideoActivity"
-            android:label="@string/title_activity_video"
-             >
+            android:label="@string/title_activity_video" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pispower.catalog.CatalogActivity" >
