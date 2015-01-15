@@ -99,11 +99,13 @@ public class VideoListItemClickListener implements OnItemClickListener {
 	}
 
 	private boolean checkIsCanPlay(VideoInfo videoInfo) {
-		if (!"FINISH".equals(videoInfo.getStatus())
-				|| videoInfo.getUrl() == null) {
-			return false;
+		if (resources.getString(R.string.finishStatus).equals(
+				videoInfo.getStatus())
+				|| resources.getString(R.string.videoUploadSuccess).equals(
+						videoInfo.getStatus())) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 }

@@ -13,5 +13,6 @@
     <string name="videoUploadSuccess">上传成功</string>
     <string name="videoUploadFail">上传失败</string>
     <string name="existVideoUploading">正在上传视频，请稍后</string>
+    <string name="finishStatus">FINISH</string>
 
 </resources>
