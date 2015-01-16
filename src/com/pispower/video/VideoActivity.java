@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.pispower.R;
 import com.pispower.util.ContentUriFileConvertion;
+import com.pispower.util.FileUtil;
 import com.pispower.video.upload.MultipartUploadHandler;
 import com.pispower.video.upload.MultipartUploadThread;
 
@@ -125,19 +126,20 @@ public class VideoActivity extends Activity {
 		Log.i(TAG, file.length() + "");
 		MultipartUploadHandler multipartUploadHandler = new MultipartUploadHandler(
 				videoListAdapter, this);
-		File tempDir = getFilesDir();
-		String mutilpartUploadDir=tempDir.getAbsolutePath() + File.separator
+		String applicationFilesDir = FileUtil
+				.getApplicationPrivateFileDir(this);
+
+		String mutilpartUploadDir = applicationFilesDir + File.separator
 				+ "MultipartUploadTemp";
 		String dir = mutilpartUploadDir + File.separator
 				+ file.getName().replace('.', '_') + new Random().nextLong();
 		File dirFile = new File(dir);
-		Log.i(TAG, "temp file dir is " + tempDir.getAbsolutePath());
+		Log.i(TAG, "temp file dir is " + dir);
 		// 开启线程，用于上传
 		MultipartUploadThread multipartUploadThread = new MultipartUploadThread(
 				multipartUploadHandler, file, dirFile);
 		multipartUploadThread.start();
 	}
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

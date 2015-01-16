@@ -2,6 +2,8 @@ package com.pispower.util;
 
 import java.io.File;
 
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 public class FileUtil {
@@ -25,6 +27,25 @@ public class FileUtil {
 			file.delete();
 			Log.i(file.getName(), "delete");
 		}
+	}
+
+	public static String getApplicationPrivateFileDir(Context context) {
+		String tempDir = null;
+		String state = Environment.getExternalStorageState();
+		if (!Environment.MEDIA_MOUNTED.equals(state)
+				&& !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			Log.i("ExternalStorageState", state);
+			return null;
+		}
+		File dir = context.getExternalFilesDir(null);
+		if (dir == null) {
+			Log.i("dir", "is null");
+			tempDir = context.getFilesDir().getAbsolutePath();
+		} else {
+			Log.i(dir.getAbsolutePath(), " is not null");
+			tempDir = dir.getAbsolutePath();
+		}
+		return tempDir;
 	}
 
 }
