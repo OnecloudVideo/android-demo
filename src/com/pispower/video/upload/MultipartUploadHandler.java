@@ -14,8 +14,6 @@ import android.util.Log;
 import com.pispower.R;
 import com.pispower.video.VideoInfo;
 import com.pispower.video.VideoListAdapter;
-import com.pispower.video.upload.UploadInfo;
-import com.pispower.video.upload.UploadStatus;
 
 public class MultipartUploadHandler extends Handler {
 

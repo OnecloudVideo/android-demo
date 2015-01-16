@@ -23,6 +23,7 @@ import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.pispower.util.FileUtil;
 import com.pispower.util.MD5;
 import com.pispower.util.QueryString;
 import com.pispower.video.upload.UploadStatus;
@@ -104,20 +105,22 @@ public class MultipartUploadClient {
 			String uploadId = initMultipartUpload();
 			if (uploadId == null) {
 				sendUploadFailMessage();
-				return;
+				Log.e(TAG, "MultipartUpload failure");
+			} else {
+				Log.i(TAG, "initMultipartUpload success " + "uploadId is"
+						+ uploadId);
+				SparseArray<String> partKeysMap = uploadParts(uploadId);
+				Log.i(TAG, "uploadParts success ");
+				completeUpload(uploadId, partKeysMap);
+				Log.i(TAG, "MultipartUpload success");
+				sendUploadSuccessMessage();
 			}
-			Log.i(TAG, "initMultipartUpload success " + "uploadId is"
-					+ uploadId);
-			SparseArray<String> partKeysMap = uploadParts(uploadId);
-			Log.i(TAG, "uploadParts success ");
-			completeUpload(uploadId, partKeysMap);
-			Log.i(TAG, "MultipartUpload success");
-			sendUploadSuccessMessage();
 		} catch (Exception e) {
 			sendUploadFailMessage();
 			Log.e(TAG, e.getMessage());
-			return;
 		}
+		FileUtil.deleteAllFiles(tmpDir);
+		return;
 	}
 
 	/**
@@ -144,10 +147,11 @@ public class MultipartUploadClient {
 		if (statusCode != 0) {
 			sendUploadFailMessage();
 			Log.e(TAG, "statusCode is " + statusCode);
-		} else {
-			Log.i(TAG, "MultipartUpload success");
-			sendUploadSuccessMessage();
 		}
+		// else {
+		// Log.i(TAG, "MultipartUpload success");
+		// sendUploadSuccessMessage();
+		// }
 		return json;
 	}
 

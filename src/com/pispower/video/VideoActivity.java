@@ -126,8 +126,9 @@ public class VideoActivity extends Activity {
 		MultipartUploadHandler multipartUploadHandler = new MultipartUploadHandler(
 				videoListAdapter, this);
 		File tempDir = getFilesDir();
-		String dir = tempDir.getAbsolutePath() + File.separator
-				+ "MultipartUploadTemp" + File.separator
+		String mutilpartUploadDir=tempDir.getAbsolutePath() + File.separator
+				+ "MultipartUploadTemp";
+		String dir = mutilpartUploadDir + File.separator
 				+ file.getName().replace('.', '_') + new Random().nextLong();
 		File dirFile = new File(dir);
 		Log.i(TAG, "temp file dir is " + tempDir.getAbsolutePath());
@@ -135,7 +136,6 @@ public class VideoActivity extends Activity {
 		MultipartUploadThread multipartUploadThread = new MultipartUploadThread(
 				multipartUploadHandler, file, dirFile);
 		multipartUploadThread.start();
-
 	}
 
 
