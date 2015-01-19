@@ -40,6 +40,7 @@ public class VideoActivity extends Activity {
 	// 资源对象
 	private Resources resources;
 
+	private String curCatalogId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +53,6 @@ public class VideoActivity extends Activity {
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle(intent.getStringExtra("folderName"));
-
 		// 获取资源对象
 		resources = getResources();
 
@@ -60,7 +60,7 @@ public class VideoActivity extends Activity {
 				resources.getString(R.string.loading),
 				resources.getString(R.string.loadDescription));
 
-		String catalogId = intent.getStringExtra("catalogId");
+	   	curCatalogId = intent.getStringExtra("catalogId");
 
 		ListView videoListView = (ListView) findViewById(R.id.videoList);
 		videoEmpTextView = (TextView) findViewById(R.id.videoEmptyHint);
@@ -73,7 +73,7 @@ public class VideoActivity extends Activity {
 		videoListView.setOnItemClickListener(videoListItemClickListener);
 		// 通过异步任务加载视频
 		new LoadVideoTask(progressDialog, videoEmpTextView, videoListAdapter,
-				resources).execute(catalogId);
+				resources).execute(curCatalogId);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class VideoActivity extends Activity {
 		Log.i(TAG, "temp file dir is " + dir);
 		// 开启线程，用于上传
 		MultipartUploadThread multipartUploadThread = new MultipartUploadThread(
-				multipartUploadHandler, file, dirFile);
+				multipartUploadHandler, file, dirFile,this.curCatalogId);
 		multipartUploadThread.start();
 	}
 

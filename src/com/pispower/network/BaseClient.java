@@ -17,6 +17,7 @@ import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -114,7 +115,7 @@ public class BaseClient {
 			final QueryString queryString) throws IOException, ParseException,
 			JSONException {
 		final URI context = addRequestParams(apiContext, queryString);
-		final HttpClient httpClient = this.getDefaultHttpClient(context);
+		final HttpClient httpClient = this.getDefaultHttpClient();
 		HttpRequestBase httpGet = getHttpRequestBase(method, context);
 		httpGet.addHeader("Accept", "application/json");
 		httpGet.setHeader("Content-Type", "application/json");
@@ -229,7 +230,7 @@ public class BaseClient {
 	 * @throws JSONException
 	 * @throws ParseException
 	 */
-	public JSONObject post(final String apiContext,
+	public JSONObject postFile(final String apiContext,
 			final QueryString queryString, final File file) throws IOException,
 			ParseException, JSONException {
 
@@ -248,14 +249,39 @@ public class BaseClient {
 		simpleMultipartEntity.addPart("uploadFile", file);
 		httppost.setEntity(simpleMultipartEntity);
 		Log.i(tag, "file name is " + file.getName());
-		final HttpClient httpClient = this.getDefaultHttpClient(URI
-				.create(context));
+		final HttpClient httpClient = this.getDefaultHttpClient();
 		HttpResponse httpResponse = httpClient.execute(httppost);
 		JSONObject jsonObject = getJSONFromResponse(httpResponse);
 		httpClient.getConnectionManager().shutdown();
 		return jsonObject;
 	}
 
+	
+	public JSONObject postUrlEncodedForm(final String apiContext,
+			final QueryString queryString) throws IOException,
+			ParseException, JSONException {
+       
+		final String context = this.apiHost + this.formatContext(apiContext);
+		QueryString addQueryString = addAditionParameters(queryString);
+		final HttpPost httppost = new HttpPost(context);
+		List<NameValuePair>formParams=new ArrayList<NameValuePair>();
+		for (final Map.Entry<String, String[]> entry : addQueryString
+				.getParamMap().entrySet()) {
+			final String key = entry.getKey();
+			for (final String val : entry.getValue()) {
+				formParams.add(new BasicNameValuePair(key, val));
+			}
+		}
+		// 按照平台规定，所有的参数必须进行一次 UTF8 转码。
+		 UrlEncodedFormEntity urlEncodedFormEntity=new UrlEncodedFormEntity(formParams,"UTF-8");
+		httppost.setEntity(urlEncodedFormEntity);
+		final HttpClient httpClient = this.getDefaultHttpClient();
+		HttpResponse httpResponse = httpClient.execute(httppost);
+		JSONObject jsonObject = getJSONFromResponse(httpResponse);
+		httpClient.getConnectionManager().shutdown();
+		return jsonObject;
+	}
+	
 	private String encodeToUTF8(final String val) {
 		try {
 			return URLEncoder.encode(val, "utf-8");
@@ -274,7 +300,6 @@ public class BaseClient {
 				.getParamMap().entrySet()) {
 			final String key = entry.getKey();
 			for (final String val : entry.getValue()) {
-				// 按照平台规定，所有的参数必须进行一次 UTF8 转码。
 				params.add(new BasicNameValuePair(key, val));
 			}
 		}
@@ -282,6 +307,7 @@ public class BaseClient {
 		String url = this.apiHost + context;
 		if (!url.endsWith("?"))
 			url += "?";
+		// 按照平台规定，所有的参数必须进行一次 UTF8 转码。
 		url += URLEncodedUtils.format(params, "utf-8");
 
 		return URI.create(url);
@@ -290,10 +316,9 @@ public class BaseClient {
 	/**
 	 * 获取 DefaultHttpClient对象
 	 * 
-	 * @param context
 	 * @return DefaultHttpClient 对象
 	 */
-	public DefaultHttpClient getDefaultHttpClient(URI context) {
+	public DefaultHttpClient getDefaultHttpClient() {
 
 		try {
 			KeyStore trustStore = KeyStore.getInstance(KeyStore

@@ -44,7 +44,36 @@ public class MultipartUploadClient {
 	// 请输入一个tmp文件夹路径
 	private File tmpDir;
 
+	private String curCatalogId;
+
 	private final BaseClient client = new BaseClient();
+
+	/**
+	 * 有参构造方法
+	 * 
+	 * @param uploadFile
+	 * @param tempDir
+	 * @param handler
+	 */
+	private MultipartUploadClient(File uploadFile, File tempDir, Handler handler) {
+		super();
+		this.file = uploadFile;
+		this.tmpDir = tempDir;
+		this.handler = handler;
+	}
+
+	/**
+	 * 有参构造方法
+	 * 
+	 * @param uploadFile
+	 * @param tempDir
+	 * @param handler
+	 */
+	public MultipartUploadClient(File uploadFile, File tempDir,
+			Handler handler, String curCatalogId) {
+		this(uploadFile, tempDir, handler);
+		this.curCatalogId = curCatalogId;
+	}
 
 	private void sendUploadStartMessage(int partNums) {
 		Message message = handler.obtainMessage();
@@ -82,20 +111,6 @@ public class MultipartUploadClient {
 	}
 
 	/**
-	 * 有参构造方法
-	 * 
-	 * @param uploadFile
-	 * @param tempDir
-	 * @param handler
-	 */
-	public MultipartUploadClient(File uploadFile, File tempDir, Handler handler) {
-		super();
-		this.file = uploadFile;
-		this.tmpDir = tempDir;
-		this.handler = handler;
-	}
-
-	/**
 	 * 上传文件
 	 */
 	public void upload() {
@@ -110,7 +125,7 @@ public class MultipartUploadClient {
 				Log.i(TAG, "initMultipartUpload success " + "uploadId is"
 						+ uploadId);
 				SparseArray<String> partKeysMap = uploadParts(uploadId);
-				Log.i(TAG, "uploadParts success ");
+				Log.i(TAG, "uploadParts success");
 				completeUpload(uploadId, partKeysMap);
 				Log.i(TAG, "MultipartUpload success");
 				sendUploadSuccessMessage();
@@ -141,8 +156,11 @@ public class MultipartUploadClient {
 			final String partKey = partKeysMap.valueAt(index);
 			queryString.addParam("part" + partKeysMap.keyAt(index), partKey);
 		}
-		JSONObject json = client.post("/video/multipartUpload/complete.api",
-				queryString);
+		queryString.addParam("catalogId", this.curCatalogId);
+ 		JSONObject json = client.postUrlEncodedForm("/video/multipartUpload/complete.api",
+ 				queryString);
+//		JSONObject json = client.post("/video/multipartUpload/complete.api",
+// 			queryString);
 		int statusCode = json.getInt("statusCode");
 		if (statusCode != 0) {
 			sendUploadFailMessage();
@@ -222,7 +240,7 @@ public class MultipartUploadClient {
 		queryString.addParam("partNumber", String.valueOf(partNum));
 		queryString.addParam("fileName", part.getAbsolutePath());
 		Log.i(TAG, "filename =" + part.getAbsolutePath());
-		JSONObject json = client.post("/video/multipartUpload/uploadPart.api",
+		JSONObject json = client.postFile("/video/multipartUpload/uploadPart.api",
 				queryString, part);
 		return json;
 	}

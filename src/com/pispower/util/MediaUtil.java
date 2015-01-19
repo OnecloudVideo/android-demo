@@ -151,6 +151,9 @@ public class MediaUtil {
 	 */
 	public static boolean isAudioFileType(String fileNmae) {
 		MediaFileType mediaFileType = getFileType(fileNmae);
+		if(mediaFileType==null){
+			return false;
+		}
 		return isAudioFileType(mediaFileType.fileType);
 	}
 
