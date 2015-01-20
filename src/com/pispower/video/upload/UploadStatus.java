@@ -4,17 +4,17 @@ public enum UploadStatus {
 	/**
 	 * 上传开始
 	 */
-	UploadStart,
+	UPLOAD_START,
 	/**
 	 * 正在上传中
 	 */
-	Uploading,
+	UPLOADING,
 	/**
 	 * 上传成功
 	 */
-	UploadSuccess,
+	UPLOAD_SUCCESS,
 	/**
 	 * 上传失败
 	 */
-	UploadFail;
+	UPLOAD_FAIL;
 }

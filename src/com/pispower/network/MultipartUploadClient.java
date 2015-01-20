@@ -77,7 +77,7 @@ public class MultipartUploadClient {
 
 	private void sendUploadStartMessage(int partNums) {
 		Message message = handler.obtainMessage();
-		message.what = UploadStatus.UploadStart.ordinal();
+		message.what = UploadStatus.UPLOAD_START.ordinal();
 		Bundle bundle = new Bundle();
 		bundle.putInt("partNums", partNums);
 		bundle.putString("fileName", file.getName());
@@ -88,7 +88,7 @@ public class MultipartUploadClient {
 
 	private void sendUploadingMessage(int currentValue) {
 		Message message = handler.obtainMessage();
-		message.what = UploadStatus.Uploading.ordinal();
+		message.what = UploadStatus.UPLOADING.ordinal();
 		Bundle bundle = new Bundle();
 		bundle.putInt("currentValue", currentValue);
 		message.setData(bundle);
@@ -97,7 +97,7 @@ public class MultipartUploadClient {
 
 	private void sendUploadSuccessMessage() {
 		Message message = handler.obtainMessage();
-		message.what = UploadStatus.UploadSuccess.ordinal();
+		message.what = UploadStatus.UPLOAD_SUCCESS.ordinal();
 		Bundle bundle = new Bundle();
 		bundle.putString("filePath", file.getAbsolutePath());
 		message.setData(bundle);
@@ -106,7 +106,7 @@ public class MultipartUploadClient {
 
 	private void sendUploadFailMessage() {
 		Message message = handler.obtainMessage();
-		message.what = UploadStatus.UploadFail.ordinal();
+		message.what = UploadStatus.UPLOAD_FAIL.ordinal();
 		handler.sendMessage(message);
 	}
 

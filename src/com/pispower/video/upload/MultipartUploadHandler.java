@@ -2,7 +2,9 @@ package com.pispower.video.upload;
 
 import java.text.Format;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -39,17 +41,17 @@ public class MultipartUploadHandler extends Handler {
 		List<VideoInfo> videoList = this.videoListAdapter.getVideoInfoList();
 		Bundle bundle = msg.getData();
 		switch (status) {
-		case UploadStart:
+		case UPLOAD_START:
 			addUploadStartInfo(videoList, bundle);
 			break;
-		case Uploading:
+		case UPLOADING:
 			// Bundle bundle=msg.getData();
 			addUploadingInfo(videoList, bundle);
 			break;
-		case UploadSuccess:
+		case UPLOAD_SUCCESS:
 			addUploadSuccessInfo(videoList, bundle);
 			break;
-		case UploadFail:
+		case UPLOAD_FAIL:
 			addUploadFailInfo(videoList);
 			break;
 		}
@@ -74,14 +76,16 @@ public class MultipartUploadHandler extends Handler {
 		videoUploadSuccessInfo.setStatus(resources
 				.getString(R.string.videoUploadSuccess));
 		videoUploadSuccessInfo.setSize(videoInfo.getSize());
-		videoUploadSuccessInfo.setUrl(bundle.getString("filePath"));
+		Map<String,String>maps=new HashMap<String,String>();
+		videoUploadSuccessInfo.setClarityUrlMap(maps);
+		maps.put("未知", bundle.getString("filePath"));
 		videoList.add(0, videoUploadSuccessInfo);
 	}
 
 	private void addUploadingInfo(List<VideoInfo> videoList, Bundle bundle) {
 		VideoInfo videoInfo = videoList.remove(0);
 		UploadInfo uploadingInfo = new UploadInfo();
-		uploadingInfo.setUploadStatus(UploadStatus.Uploading);
+		uploadingInfo.setUploadStatus(UploadStatus.UPLOADING);
 		int maxValue = videoInfo.getUploadInfo().getMaxValue();
 		int curValue = bundle.getInt("currentValue");
 		Log.i("maxValue", maxValue + "");
@@ -100,7 +104,7 @@ public class MultipartUploadHandler extends Handler {
 
 	private void addUploadStartInfo(List<VideoInfo> videoList, Bundle bundle) {
 		UploadInfo uploadInfo = new UploadInfo();
-		uploadInfo.setUploadStatus(UploadStatus.UploadStart);
+		uploadInfo.setUploadStatus(UploadStatus.UPLOAD_START);
 		uploadInfo.setMaxValue(bundle.getInt("partNums"));
 		VideoInfo videoInfo = new VideoInfo(uploadInfo);
 		videoInfo.setName(bundle.getString("fileName"));

@@ -1,5 +1,7 @@
 package com.pispower.video;
 
+import java.util.Map;
+
 import com.pispower.video.upload.UploadInfo;
 
 public class VideoInfo {
@@ -12,8 +14,10 @@ public class VideoInfo {
 	private String size;
 	// 视频的状态
 	private String status;
-	// 视频的直接可播放地址
-	private String url;
+	
+	// 清晰度与对应url的map
+	private Map<String, String> clarityUrlMap;
+
 	// 视频上传的信息
 	public UploadInfo uploadInfo;
 
@@ -33,23 +37,15 @@ public class VideoInfo {
 		super();
 	}
 
-	/**
-	 * 有参构造方法
-	 * 
-	 * @param id
-	 * @param name
-	 * @param size
-	 * @param status
-	 * @param url
-	 */
+
 	public VideoInfo(String id, String name, String size, String status,
-			String url) {
+			Map<String, String> clarityUrlMap) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.size = size;
 		this.status = status;
-		this.url = url;
+		this.clarityUrlMap = clarityUrlMap;
 	}
 
 	/**
@@ -136,22 +132,24 @@ public class VideoInfo {
 		this.status = status;
 	}
 
+
 	/**
-	 * 获取url
 	 * 
-	 * @return url
+	 * 获取清晰度与对应的url的map
+	 * 
+	 * @return
 	 */
-	public String getUrl() {
-		return url;
+	public Map<String, String> getClarityUrlMap() {
+		return clarityUrlMap;
 	}
 
 	/**
-	 * 设置url
+	 * 设置清晰度与对应的url的map
 	 * 
-	 * @param url
+	 * @param clarityUrlMap
 	 */
-	public void setUrl(String url) {
-		this.url = url;
+	public void setClarityUrlMap(Map<String, String> clarityUrlMap) {
+		this.clarityUrlMap = clarityUrlMap;
 	}
 
 }

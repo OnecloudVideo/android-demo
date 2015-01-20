@@ -15,6 +15,8 @@
 package com.pispower.network;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -154,42 +156,41 @@ public class VideoClient {
 	 * @throws ParseException
 	 * @throws IOException
 	 */
-	public String getVideoEmbedCode(String videoId, String clarity)
+	public Map<String, String> getVideoEmbedCode(String videoId, String clarity)
 			throws JSONException, ParseException, IOException {
+		Map<String, String> clarityUrlMap = new HashMap<String, String>();
+
 		BaseClient client = getBaseClient();
 		QueryString qs = new QueryString();
 		qs.addParam("videoId", videoId);
 		JSONObject jo;
 
 		jo = client.get("/video/get.api", qs);
+
 		if ((int) jo.getInt("statusCode") != 0) {
 			Log.i(Tag, "/video/get.api return statusCode is not zero");
-			return null;
+			return clarityUrlMap;
 		}
 		if (jo.length() == 0) {
 			Log.i(Tag, "/video/get.api return json is empty");
-			return null;
+			return clarityUrlMap;
 		}
 		JSONArray jsonArrayVideoCodes = jo.getJSONArray("embedCodes");
 		int embedCodesNums = jsonArrayVideoCodes.length();
 		if (embedCodesNums == 0) {
 			Log.i(Tag, "embedCodes is empty");
-			return null;
+			return clarityUrlMap;
 		}
-		JSONObject needVideoCode = null;
+
 		for (int i = 0; i < embedCodesNums; i++) {
-			JSONObject js = jsonArrayVideoCodes.getJSONObject(i);
-			if (js.getString("clarity").equals(clarity)) {
-				needVideoCode = js;
-				break;
-			}
+			JSONObject embedCodeJO = jsonArrayVideoCodes.getJSONObject(i);
+			String clarityName = embedCodeJO.getString("clarity");
+			String android_IOS_embedCode = embedCodeJO.getString("html5Code");
+			String remoteUrl = getUrlFromEmbedCode(android_IOS_embedCode);
+			clarityUrlMap.put(clarityName, remoteUrl);
 		}
-		if (needVideoCode == null) {
-			Log.i(Tag, clarity + " embedCode is empty");
-			return null;
-		}
-		String android_IOS_embedCode = needVideoCode.getString("html5Code");
-		return android_IOS_embedCode;
+
+		return clarityUrlMap;
 	}
 
 	/**
@@ -198,7 +199,7 @@ public class VideoClient {
 	 * @param embedCode
 	 * @return 字符串
 	 */
-	public String getUrlFromEmbedCode(String embedCode) {
+	private String getUrlFromEmbedCode(String embedCode) {
 		if (embedCode == null) {
 			return null;
 		}
