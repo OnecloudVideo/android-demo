@@ -3,7 +3,11 @@ package com.pispower.video;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,18 +15,21 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pispower.R;
+import com.pispower.network.VideoClient;
 import com.pispower.util.ContentUriFileConvertion;
 import com.pispower.util.FileUtil;
+import com.pispower.util.PullRefreshListView;
+import com.pispower.util.PullRefreshListView.OnRefreshListener;
 import com.pispower.video.upload.MultipartUploadHandler;
 import com.pispower.video.upload.MultipartUploadThread;
 
@@ -39,8 +46,11 @@ public class VideoActivity extends Activity {
 	private TextView videoEmpTextView;
 	// 资源对象
 	private Resources resources;
+	
+	private PullRefreshListView videoListView;
 
 	private String curCatalogId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,9 +70,9 @@ public class VideoActivity extends Activity {
 				resources.getString(R.string.loading),
 				resources.getString(R.string.loadDescription));
 
-	   	curCatalogId = intent.getStringExtra("catalogId");
+		curCatalogId = intent.getStringExtra("catalogId");
 
-		ListView videoListView = (ListView) findViewById(R.id.videoList);
+	    videoListView = (PullRefreshListView) findViewById(R.id.videoList);
 		videoEmpTextView = (TextView) findViewById(R.id.videoEmptyHint);
 		videoListView.setEmptyView(videoEmpTextView);
 		videoListAdapter = new VideoListAdapter(new ArrayList<VideoInfo>(),
@@ -71,6 +81,75 @@ public class VideoActivity extends Activity {
 				this);
 		videoListView.setAdapter(videoListAdapter);
 		videoListView.setOnItemClickListener(videoListItemClickListener);
+
+		videoListView.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				new AsyncTask<String, Void, List<VideoInfo>>() {
+
+					@Override
+					protected List<VideoInfo> doInBackground(String... params) {
+						String catalogId = params[0];
+						VideoClient videoClient = new VideoClient();
+						List<VideoInfo> videoInfoList = new ArrayList<VideoInfo>();
+						try {
+							JSONArray jsonArray = videoClient
+									.listVideo(catalogId);
+							if (jsonArray == null) {
+								return videoInfoList;
+							}
+							if (jsonArray.length() == 0) {
+								return videoInfoList;
+							}
+							for (int i = 0; i < jsonArray.length(); i++) {
+								VideoInfo videoInfo = new VideoInfo();
+								JSONObject jsonObject = jsonArray
+										.getJSONObject(i);
+								videoInfo.setId(jsonObject.getString("id"));
+								String fileName = jsonObject.getString("name");
+								videoInfo.setName(fileName);
+								// 现在restful api 中的返回不包含大小，所以在此给固定的大小100MB
+								videoInfo.setSize("100MB");
+								String status = jsonObject.getString("status");
+								videoInfo.setStatus(status);
+								if (status.equals("FINISH")) {
+									Map<String, String> clarityUrlMap = videoClient.getVideoEmbedCode(
+											jsonObject.getString("id"),
+											resources
+													.getString(R.string.audioClarity));
+									videoInfo.setClarityUrlMap(clarityUrlMap);
+								} else {
+									videoInfo.setClarityUrlMap(null);
+								}
+								videoInfoList.add(videoInfo);
+							}
+							return videoInfoList;
+						} catch (Exception e) {
+							Log.e(TAG, e.getMessage());
+							return null;
+						}
+					}
+					@Override
+					protected void onPostExecute(List<VideoInfo> result) {
+						super.onPostExecute(result);
+						
+						if (!isCancelled() && result != null) {
+							videoEmpTextView.setText(R.string.videoListEmpty);
+							videoListAdapter.setVideoInfoList(result);
+							videoListAdapter.notifyDataSetChanged();
+						} else {
+							videoEmpTextView.setText(R.string.videoListLoadError);
+						}
+						
+						videoListView.onRefreshComplete();
+					}
+				}.execute(curCatalogId);
+
+			}
+
+		});
+
 		// 通过异步任务加载视频
 		new LoadVideoTask(progressDialog, videoEmpTextView, videoListAdapter,
 				resources).execute(curCatalogId);
@@ -137,7 +216,7 @@ public class VideoActivity extends Activity {
 		Log.i(TAG, "temp file dir is " + dir);
 		// 开启线程，用于上传
 		MultipartUploadThread multipartUploadThread = new MultipartUploadThread(
-				multipartUploadHandler, file, dirFile,this.curCatalogId);
+				multipartUploadHandler, file, dirFile, this.curCatalogId);
 		multipartUploadThread.start();
 	}
 

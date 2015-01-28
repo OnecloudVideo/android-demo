@@ -1,6 +1,12 @@
 package com.pispower.catalog;
 
-public class CatalogInfo {
+import java.io.Serializable;
+
+public class CatalogInfo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// 分类所包含的视频数
 	private String holdVideoNums;
 	// 分类id
@@ -104,5 +110,6 @@ public class CatalogInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+   
+		 
 }

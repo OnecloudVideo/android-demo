@@ -1,6 +1,13 @@
 package com.pispower.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 
 import android.content.Context;
 import android.os.Environment;
@@ -35,8 +42,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * 获取应用程序私有文件目录的字符串表示，首先会尝试获取外部的文件目录，如果可以获取
-	 * 则返回，否则会去获取内部的文件目录。
+	 * 获取应用程序私有文件目录的字符串表示，首先会尝试获取外部的文件目录，如果可以获取 则返回，否则会去获取内部的文件目录。
 	 * 
 	 * @param context
 	 * @return
@@ -59,5 +65,81 @@ public class FileUtil {
 		}
 		return tempDir;
 	}
+    /**
+     * 获取缓存目录
+     * @param context
+     * @return
+     */
+	public static String getApplicationCacheDir(Context context) {
 
+		String tempDir = null;
+		String state = Environment.getExternalStorageState();
+		if (!Environment.MEDIA_MOUNTED.equals(state)
+				&& !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			Log.i("ExternalStorageState", state);
+			return null;
+		}
+		File dir = context.getExternalCacheDir();
+		if (dir == null) {
+			Log.i("dir", "is null");
+			tempDir = context.getCacheDir().getAbsolutePath();
+		} else {
+			Log.i(dir.getAbsolutePath(), " is not null");
+			tempDir = dir.getAbsolutePath();
+		}
+		return tempDir;
+
+	}
+
+	/**
+	 * 写一个对象到缓存中
+	 * @param object
+	 */
+	public static void writeToCache(Object object) {
+
+		String cacheDir = getApplicationCacheDir(null);
+		String fileName = cacheDir + File.separator + "catalogInfos";
+		File file = new File(fileName);
+		try {
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+					new FileOutputStream(file));
+			objectOutputStream.writeObject(object);
+			objectOutputStream.close();
+		} catch (FileNotFoundException e) {
+			Log.i("FileNotFoundException", e.getMessage());
+		} catch (IOException e) {
+			Log.i("IOException", e.getMessage());
+		}
+  
+	}
+	/**
+	 * 从缓存中读取一个对象
+	 * @return
+	 */
+	public Object readCacheObject(){
+		String cacheDir = getApplicationCacheDir(null);
+		String fileName = cacheDir + File.separator + "catalogInfos";
+		File file = new File(fileName);
+		if(!file.exists()){
+			return null;
+		}
+		Object returnObject=null;
+		try {
+			ObjectInputStream objectInputStream=new ObjectInputStream(new FileInputStream(file));
+			try {
+				returnObject=objectInputStream.readObject();
+			} catch (ClassNotFoundException e) {
+				Log.i("ClassNotFoundException", e.getMessage()); 
+			}
+			objectInputStream.close();
+		} catch (StreamCorruptedException e) {
+			Log.i("StreamCorruptedException", e.getMessage()); 
+		} catch (FileNotFoundException e) {
+			Log.i("FileNotFoundException", e.getMessage()); 
+		} catch (IOException e) {
+			Log.i("IOException", e.getMessage()); 
+		}
+		
+		return returnObject;
+	}
 }

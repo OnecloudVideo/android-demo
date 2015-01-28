@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ListView
+    <com.pispower.util.PullRefreshListView
         android:id="@+id/catalogListView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/addFile" >
-    </ListView>
+    </com.pispower.util.PullRefreshListView>
 
     <TextView
         android:id="@+id/emptyHint"

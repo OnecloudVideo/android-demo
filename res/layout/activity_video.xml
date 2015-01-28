@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.pispower.video.VideoActivity" >
 
-    <ListView
+    <com.pispower.util.PullRefreshListView
         android:id="@+id/videoList"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/videoUploadButton"
         android:layout_alignParentTop="true" >
 
-    </ListView>
+    </com.pispower.util.PullRefreshListView>
+    
     <TextView
         android:id="@+id/videoEmptyHint"
         android:layout_width="wrap_content"

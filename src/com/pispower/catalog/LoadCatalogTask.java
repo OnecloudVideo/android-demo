@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pispower.R;
@@ -23,9 +22,11 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	// TextView对象
 	private TextView listViewEmptyHintTextView;
 	// ListView 对象
-	private ListView listView;
+	// private ListView listView;
 	// ProgressDialog 对象
 	private ProgressDialog progressDialog;
+	// adapter
+	private CatalogListViewAdapter catalogListViewAdapter;
 
 	/**
 	 * 有参构造方法
@@ -35,11 +36,13 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	 * @param listViewEmptyHintTextView
 	 * @param context
 	 */
-	public LoadCatalogTask(ProgressDialog progressDialog, ListView listView,
-			TextView listViewEmptyHintTextView, Context context) {
+	public LoadCatalogTask(ProgressDialog progressDialog,
+			TextView listViewEmptyHintTextView,
+			CatalogListViewAdapter catalogListViewAdapter, Context context) {
 		this.progressDialog = progressDialog;
-		this.listView = listView;
+		// this.listView = listView;
 		this.listViewEmptyHintTextView = listViewEmptyHintTextView;
+		this.catalogListViewAdapter = catalogListViewAdapter;
 		this.context = context;
 	}
 
@@ -88,17 +91,20 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 			this.progressDialog.dismiss();
 		}
 		// 为ListView设置Adapter
-		CatalogListViewAdapter listViewAdapter = null;
+		// CatalogListViewAdapter listViewAdapter = null;
 		if ((!isCancelled()) && (paramList != null)) {
 			this.listViewEmptyHintTextView.setText(R.string.noAnyVideos);
-			listViewAdapter = new CatalogListViewAdapter(paramList,
-					this.context);
+			this.catalogListViewAdapter.setDataList(paramList);
+			// listViewAdapter = new CatalogListViewAdapter(paramList,
+			// this.context);
 		} else {
 			this.listViewEmptyHintTextView.setText(R.string.loadError);
-			listViewAdapter = new CatalogListViewAdapter(
-					new ArrayList<CatalogInfo>(), this.context);
+			this.catalogListViewAdapter
+					.setDataList(new ArrayList<CatalogInfo>());
+			// listViewAdapter = new CatalogListViewAdapter(
+			// new ArrayList<CatalogInfo>(), this.context);
 		}
-		this.listView.setAdapter(listViewAdapter);
+		this.catalogListViewAdapter.notifyDataSetChanged();
 		return;
 	}
 }
