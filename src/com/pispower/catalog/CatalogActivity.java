@@ -63,8 +63,8 @@ public class CatalogActivity extends Activity {
 		this.listEmptyHintTextView = ((TextView) findViewById(R.id.emptyHint));
 		this.pullRefreshListView.setEmptyView(this.listEmptyHintTextView);
 		this.pullRefreshListView
-				.setOnItemClickListener(new CatalogListViewItemClickListener(
-						this));
+		.setOnItemClickListener(new CatalogListViewItemClickListener(
+				this));
 		this.catalogListViewAdapter=new CatalogListViewAdapter(new ArrayList<CatalogInfo>(), this);
 		this.pullRefreshListView.setAdapter(this.catalogListViewAdapter);
 		this.pullRefreshListView.setOnRefreshListener(new OnRefreshListener() {
@@ -146,6 +146,7 @@ public class CatalogActivity extends Activity {
 		new LoadCatalogTask(this.progressDialog, 
 				this.listEmptyHintTextView,this.catalogListViewAdapter, this).execute(new Void[] { null,
 				null });
+		
 	}
 
 	@Override

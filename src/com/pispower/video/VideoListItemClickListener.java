@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.HeaderViewListAdapter;
 import android.widget.Toast;
 
 import com.pispower.R;
@@ -45,8 +46,11 @@ public class VideoListItemClickListener implements OnItemClickListener {
 	public void onItemClick(final AdapterView<?> parent, View view,
 			final int position, long id) {
 
-		VideoInfo videoPlayList = (VideoInfo) parent
-				.getItemAtPosition(position);
+		
+		 HeaderViewListAdapter listAdapter = (HeaderViewListAdapter) parent.getAdapter();  
+		 VideoListAdapter adapter = (VideoListAdapter)listAdapter.getWrappedAdapter(); 
+		   VideoInfo videoPlayList = (VideoInfo) 
+					adapter.getItem(position);
 
 		if (checkIsCanPlay(videoPlayList)) {
 			showSurePlayDialog(parent, videoPlayList);

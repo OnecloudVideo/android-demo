@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.HeaderViewListAdapter;
 import android.widget.Toast;
 
 import com.pispower.R;
@@ -29,8 +30,10 @@ public class CatalogListViewItemClickListener implements
 			long id) {
 		if (NetworkInspection.isExistingAnyNetwork(context)) {
 			Intent intent = new Intent(this.context, VideoActivity.class);
-			CatalogInfo localVideoPackageInfo = (CatalogInfo) parent
-					.getItemAtPosition(position);
+		   HeaderViewListAdapter listAdapter = (HeaderViewListAdapter) parent.getAdapter();  
+		   CatalogListViewAdapter adapter = (CatalogListViewAdapter)listAdapter.getWrappedAdapter(); 
+			CatalogInfo localVideoPackageInfo = (CatalogInfo) 
+					adapter.getItem(position);
 			intent.putExtra("catalogId", localVideoPackageInfo.getId());
 			intent.putExtra("folderName", localVideoPackageInfo.getName());
 			this.context.startActivity(intent);
