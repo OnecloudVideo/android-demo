@@ -76,7 +76,7 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 				videoInfo.setSize("100MB");
 				String status = jsonObject.getString("status");
 				videoInfo.setStatus(status);
-				if (status.equals("FINISH")) {
+				if (status.equals(resources.getString(R.string.finishStatus))) {
 					Map<String, String> clarityUrlMap = videoClient
 							.getVideoEmbedCode(jsonObject.getString("id"),
 									resources.getString(R.string.audioClarity));

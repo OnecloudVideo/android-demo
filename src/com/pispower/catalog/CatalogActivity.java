@@ -182,7 +182,7 @@ public class CatalogActivity extends Activity {
 								.toString();
 						// 开启异步任务，用于创建视频分类
 						new CreateCatalogTask(CatalogActivity.this,
-								CatalogActivity.this.pullRefreshListView)
+								CatalogActivity.this.catalogListViewAdapter)
 								.execute(new String[] { str });
 
 						paramAnonymousDialogInterface.dismiss();

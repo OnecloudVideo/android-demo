@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pispower.R;
@@ -16,8 +15,8 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 	private static final String TAG = "CreateFileTask";
 	// 场景对象
 	private Context context;
-	// listView对象
-	private ListView listView;
+	//CatalogListViewAdapter 对象
+	private CatalogListViewAdapter catalogListViewAdapter;
 	// 资源对象
 	private Resources resources;
 
@@ -27,9 +26,9 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 	 * @param context
 	 * @param listView
 	 */
-	public CreateCatalogTask(Context context, ListView listView) {
+	public CreateCatalogTask(Context context, CatalogListViewAdapter catalogListViewAdapter) {
 		this.context = context;
-		this.listView = listView;
+		this.catalogListViewAdapter = catalogListViewAdapter;
 		this.resources = context.getResources();
 	}
 
@@ -78,11 +77,11 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 					Toast.LENGTH_LONG).show();
 			return;
 		}
+		
 		// 成功，更新相应的ListView
-		CatalogListViewAdapter localVideoPackageListAdapter = (CatalogListViewAdapter) this.listView
-				.getAdapter();
-		localVideoPackageListAdapter.addData(catalogInfo, 0);
-		localVideoPackageListAdapter.notifyDataSetChanged();
+	 
+		catalogListViewAdapter.addData(catalogInfo, 0);
+		catalogListViewAdapter.notifyDataSetChanged();
 
 		Toast.makeText(this.context,
 				this.resources.getString(R.string.createCatalogSuccess),

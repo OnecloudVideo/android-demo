@@ -86,6 +86,15 @@ public class VideoActivity extends Activity {
 
 			@Override
 			public void onRefresh() {
+				
+				List<VideoInfo> videoInfos=	videoListAdapter.getVideoInfoList(); 
+				if(videoInfos!=null&&!videoInfos.isEmpty()){
+					if(videoInfos.get(0).uploadInfo!=null){
+						videoListView.onRefreshComplete();
+						return;
+					}
+				}
+				
 				new AsyncTask<String, Void, List<VideoInfo>>() {
 
 					@Override
@@ -113,7 +122,7 @@ public class VideoActivity extends Activity {
 								videoInfo.setSize("100MB");
 								String status = jsonObject.getString("status");
 								videoInfo.setStatus(status);
-								if (status.equals("FINISH")) {
+								if (status.equals(resources.getString(R.string.finishStatus))) {
 									Map<String, String> clarityUrlMap = videoClient.getVideoEmbedCode(
 											jsonObject.getString("id"),
 											resources
@@ -172,7 +181,12 @@ public class VideoActivity extends Activity {
 				return;
 			}
 		}
-
+        if(videoListView.isRefreshing()){
+        	Toast.makeText(this,
+					resources.getString(R.string.isRefresh),
+					Toast.LENGTH_LONG).show();
+			return;
+        }
 		// 新建Intent，通过intent 来使用系统已安装的软件来获取音频与视频文件
 		Intent getVideoIntent = new Intent();
 		// 设置类型为视频与音频
