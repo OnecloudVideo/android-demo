@@ -14,6 +14,5 @@
     <string name="videoUploadFail">上传失败</string>
     <string name="existVideoUploading">正在上传视频，请稍后</string>
      <string name="isRefresh">正在刷新，请稍后</string>
-    <string name="finishStatus">FINISH</string>
     <string name="selectClarityVideo">请选择要播放的清晰度</string>
 </resources>

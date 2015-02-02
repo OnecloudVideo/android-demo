@@ -34,7 +34,7 @@ public class MultipartUploadClient {
 
 	private static final int BUFFER_SIZE = 1024;
 
-	private static final int PART_FILE_SIZE = 4 * 1024 * 1024; // 4M
+	private static final int PART_FILE_SIZE = 1 * 1024 * 1024; // 4M
 
 	private Handler handler = null;
 

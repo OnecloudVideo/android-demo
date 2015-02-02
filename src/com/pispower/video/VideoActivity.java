@@ -30,6 +30,7 @@ import com.pispower.util.ContentUriFileConvertion;
 import com.pispower.util.FileUtil;
 import com.pispower.util.PullRefreshListView;
 import com.pispower.util.PullRefreshListView.OnRefreshListener;
+import com.pispower.util.StatusTransition;
 import com.pispower.video.upload.MultipartUploadHandler;
 import com.pispower.video.upload.MultipartUploadThread;
 
@@ -121,8 +122,9 @@ public class VideoActivity extends Activity {
 								// 现在restful api 中的返回不包含大小，所以在此给固定的大小100MB
 								videoInfo.setSize("100MB");
 								String status = jsonObject.getString("status");
+								status = StatusTransition.toChinese(status,resources);
 								videoInfo.setStatus(status);
-								if (status.equals(resources.getString(R.string.finishStatus))) {
+								if (status.equals(resources.getString(R.string.FINISH))) {
 									Map<String, String> clarityUrlMap = videoClient.getVideoEmbedCode(
 											jsonObject.getString("id"),
 											resources

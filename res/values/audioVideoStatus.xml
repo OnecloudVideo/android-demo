@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="PROCESSING">正在处理</string>
+    <string name="PROCESSINGENGLISH">PROCESSING</string>
+    <string name="FINISH">可发布</string>
+     <string name="FINISHENGLISH">FINISH</string>
+    <string name="UNKNOWNSTATUS">未知</string>
+</resources>

@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.pispower.R;
 import com.pispower.network.VideoClient;
+import com.pispower.util.StatusTransition;
 
 public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 
@@ -75,8 +76,9 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 				//现在restful api 中的返回不包含大小，所以在此给固定的大小100MB
 				videoInfo.setSize("100MB");
 				String status = jsonObject.getString("status");
+				status=StatusTransition.toChinese(status,resources);
 				videoInfo.setStatus(status);
-				if (status.equals(resources.getString(R.string.finishStatus))) {
+				if (status.equals(resources.getString(R.string.FINISH))) {
 					Map<String, String> clarityUrlMap = videoClient
 							.getVideoEmbedCode(jsonObject.getString("id"),
 									resources.getString(R.string.audioClarity));
