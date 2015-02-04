@@ -95,7 +95,7 @@ public class VideoListItemClickListener implements OnItemClickListener {
 							if (seleteClarity == null) {
 								seleteClarity = claritys[0];
 							}
-							intent.putExtra("playUri",
+							intent.putExtra(resources.getString(R.string.playUri),
 									clarityUrlMap.get(seleteClarity));
 							context.startActivity(intent);
 						} else {

@@ -73,8 +73,8 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 				videoInfo.setId(jsonObject.getString("id"));
 				String fileName = jsonObject.getString("name");
 				videoInfo.setName(fileName);
-				//现在restful api 中的返回不包含大小，所以在此给固定的大小100MB
-				videoInfo.setSize("100MB");
+				//现在restful api 中的返回不包含大小，所以设置为空字符串
+				videoInfo.setSize(resources.getString(R.string.emptyString));
 				String status = jsonObject.getString("status");
 				status=StatusTransition.toChinese(status,resources);
 				videoInfo.setStatus(status);

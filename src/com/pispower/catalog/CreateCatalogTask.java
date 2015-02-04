@@ -63,7 +63,7 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 			}
 			return catalogInfo;
 		} catch (Exception localException) {
-			Log.i(TAG, localException.getMessage());
+			Log.e(TAG, localException.getMessage());
 		}
 		return null;
 	}
@@ -79,7 +79,6 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 		}
 		
 		// 成功，更新相应的ListView
-	 
 		catalogListViewAdapter.addData(catalogInfo, 0);
 		catalogListViewAdapter.notifyDataSetChanged();
 

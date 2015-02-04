@@ -33,7 +33,7 @@ import com.pispower.util.PullRefreshListView.OnRefreshListener;
 public class CatalogActivity extends Activity {
 	
 	
-	public static final String TAG="CatalogActivity";
+	private static final String TAG="CatalogActivity";
 	
 	private LayoutInflater inflater;
 	private TextView listEmptyHintTextView;
@@ -76,7 +76,6 @@ public class CatalogActivity extends Activity {
 				// If this is a webservice call, it might be asynchronous so
 				// you would have to call listView.onRefreshComplete(); when
 				// the webservice returns the data
-//				adapter.loadData();
 				
 				new  AsyncTask<Void, Void, List<CatalogInfo>>() {
 
@@ -113,7 +112,7 @@ public class CatalogActivity extends Activity {
 							
 
 						} catch (Exception localException) {
-							Log.i(TAG, localException.getMessage());
+							Log.e(TAG, localException.getMessage());
 							return null;
 						}
 						return catalogInfos;
@@ -129,7 +128,6 @@ public class CatalogActivity extends Activity {
 							listEmptyHintTextView.setText(R.string.noAnyVideos);
 							catalogListViewAdapter.setDataList(paramList);
 							pullRefreshListView.onRefreshComplete();
-							
 							catalogListViewAdapter.notifyDataSetChanged();
 						
 						}  else{

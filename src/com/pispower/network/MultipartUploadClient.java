@@ -26,6 +26,7 @@ import android.util.SparseArray;
 import com.pispower.util.FileUtil;
 import com.pispower.util.MD5;
 import com.pispower.util.QueryString;
+import com.pispower.video.upload.MutilUploadHandlerMessageParams;
 import com.pispower.video.upload.UploadStatus;
 
 public class MultipartUploadClient {
@@ -34,7 +35,7 @@ public class MultipartUploadClient {
 
 	private static final int BUFFER_SIZE = 1024;
 
-	private static final int PART_FILE_SIZE = 1 * 1024 * 1024; // 4M
+	private static final int PART_FILE_SIZE = 1 * 1024 * 1024; // 1M
 
 	private Handler handler = null;
 
@@ -46,7 +47,7 @@ public class MultipartUploadClient {
 
 	private String curCatalogId;
 
-	private final BaseClient client = new BaseClient();
+	private final BaseClient client;
 
 	/**
 	 * 有参构造方法
@@ -60,6 +61,7 @@ public class MultipartUploadClient {
 		this.file = uploadFile;
 		this.tmpDir = tempDir;
 		this.handler = handler;
+		this.client = new BaseClient(this.handler);
 	}
 
 	/**
@@ -79,9 +81,9 @@ public class MultipartUploadClient {
 		Message message = handler.obtainMessage();
 		message.what = UploadStatus.UPLOAD_START.ordinal();
 		Bundle bundle = new Bundle();
-		bundle.putInt("partNums", partNums);
-		bundle.putString("fileName", file.getName());
-		bundle.putString("fileSize", file.length() + "");
+		bundle.putInt(MutilUploadHandlerMessageParams.PART_NUMS, partNums);
+		bundle.putString(MutilUploadHandlerMessageParams.FILE_NAME, file.getName());
+		bundle.putString(MutilUploadHandlerMessageParams.FILE_SIZE, file.length() + "");
 		message.setData(bundle);
 		handler.sendMessage(message);
 	}
@@ -90,7 +92,7 @@ public class MultipartUploadClient {
 		Message message = handler.obtainMessage();
 		message.what = UploadStatus.UPLOADING.ordinal();
 		Bundle bundle = new Bundle();
-		bundle.putInt("currentValue", currentValue);
+		bundle.putLong(MutilUploadHandlerMessageParams.CURRENT_VALUE, currentValue);
 		message.setData(bundle);
 		handler.sendMessage(message);
 	}
@@ -99,7 +101,7 @@ public class MultipartUploadClient {
 		Message message = handler.obtainMessage();
 		message.what = UploadStatus.UPLOAD_SUCCESS.ordinal();
 		Bundle bundle = new Bundle();
-		bundle.putString("filePath", file.getAbsolutePath());
+		bundle.putString(MutilUploadHandlerMessageParams.FILE_PATH, file.getAbsolutePath());
 		message.setData(bundle);
 		handler.sendMessage(message);
 	}
@@ -120,14 +122,14 @@ public class MultipartUploadClient {
 			String uploadId = initMultipartUpload();
 			if (uploadId == null) {
 				sendUploadFailMessage();
-				Log.e(TAG, "MultipartUpload failure");
+				Log.w(TAG, "MultipartUpload failure");
 			} else {
-				Log.i(TAG, "initMultipartUpload success " + "uploadId is"
+				Log.d(TAG, "initMultipartUpload success " + "uploadId is"
 						+ uploadId);
 				SparseArray<String> partKeysMap = uploadParts(uploadId);
-				Log.i(TAG, "uploadParts success");
+				Log.d(TAG, "uploadParts success");
 				completeUpload(uploadId, partKeysMap);
-				Log.i(TAG, "MultipartUpload success");
+				Log.d(TAG, "MultipartUpload success");
 				sendUploadSuccessMessage();
 			}
 		} catch (Exception e) {
@@ -149,7 +151,7 @@ public class MultipartUploadClient {
 	private JSONObject completeUpload(final String uploadId,
 			final SparseArray<String> partKeysMap) throws ParseException,
 			JSONException, IOException {
-		Log.i(TAG, "try to complete upload...");
+		Log.d(TAG, "try to complete upload...");
 		final QueryString queryString = new QueryString();
 		queryString.addParam("uploadId", uploadId);
 		for (int index = 0; index < partKeysMap.size(); index++) {
@@ -159,17 +161,11 @@ public class MultipartUploadClient {
 		queryString.addParam("catalogId", this.curCatalogId);
  		JSONObject json = client.postUrlEncodedForm("/video/multipartUpload/complete.api",
  				queryString);
-//		JSONObject json = client.post("/video/multipartUpload/complete.api",
-// 			queryString);
 		int statusCode = json.getInt("statusCode");
 		if (statusCode != 0) {
 			sendUploadFailMessage();
-			Log.e(TAG, "statusCode is " + statusCode);
+			Log.w(TAG, "statusCode is " + statusCode);
 		}
-		// else {
-		// Log.i(TAG, "MultipartUpload success");
-		// sendUploadSuccessMessage();
-		// }
 		return json;
 	}
 
@@ -208,7 +204,7 @@ public class MultipartUploadClient {
 						|| !md5.equals(partJsonObject.getString("partMD5"))) {
 					uploadFailpart.put(part.getName(), md5);
 					linkedParts.push(part);
-					Log.i(TAG, part.getName() + " part file upload failure");
+					Log.w(TAG, part.getName() + " part file upload failure");
 				} else {
 					Log.i(TAG, part.getName() + " part file upload success");
 					map.put(partNum, partJsonObject.getString("partKey"));
@@ -234,12 +230,12 @@ public class MultipartUploadClient {
 	 */
 	private JSONObject uploadPart(final String uploadId, final Integer partNum,
 			final File part) throws ParseException, JSONException, IOException {
-		Log.i(TAG, "uploading part " + partNum + " ...");
+		Log.d(TAG, "uploading part " + partNum + " ...");
 		final QueryString queryString = new QueryString();
 		queryString.addParam("uploadId", uploadId);
 		queryString.addParam("partNumber", String.valueOf(partNum));
 		queryString.addParam("fileName", part.getAbsolutePath());
-		Log.i(TAG, "filename =" + part.getAbsolutePath());
+		Log.d(TAG, "filename =" + part.getAbsolutePath());
 		JSONObject json = client.postFile("/video/multipartUpload/uploadPart.api",
 				queryString, part);
 		return json;
@@ -255,12 +251,12 @@ public class MultipartUploadClient {
 	 */
 	private String initMultipartUpload() throws ParseException, JSONException,
 			IOException, NoSuchAlgorithmException {
-		Log.i(TAG, "initing multipart upload....");
+		Log.d(TAG, "initing multipart upload....");
 		final QueryString queryString = new QueryString();
 		queryString.addParam("fileName", file.getName());
 		String fileMD5String = null;
 		fileMD5String = MD5.getFileMd5StringForAndroid(file);
-		Log.i(TAG, "file md5 is " + fileMD5String);
+		Log.d(TAG, "file md5 is " + fileMD5String);
 		queryString.addParam("fileMD5", fileMD5String);
 		JSONObject json = client.post("/video/multipartUpload/init.api",
 				queryString);

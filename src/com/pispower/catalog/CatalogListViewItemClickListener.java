@@ -2,6 +2,7 @@ package com.pispower.catalog;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.HeaderViewListAdapter;
@@ -34,8 +35,9 @@ public class CatalogListViewItemClickListener implements
 		   CatalogListViewAdapter adapter = (CatalogListViewAdapter)listAdapter.getWrappedAdapter(); 
 			CatalogInfo localVideoPackageInfo = (CatalogInfo) 
 					adapter.getItem(position);
-			intent.putExtra("catalogId", localVideoPackageInfo.getId());
-			intent.putExtra("folderName", localVideoPackageInfo.getName());
+		    Resources resources=	this.context.getResources();
+			intent.putExtra(resources.getString(R.string.catalogId), localVideoPackageInfo.getId());
+			intent.putExtra(resources.getString(R.string.folderName), localVideoPackageInfo.getName());
 			this.context.startActivity(intent);
 		} else {
            Toast.makeText(context, R.string.noAnyNetworks, Toast.LENGTH_LONG).show();

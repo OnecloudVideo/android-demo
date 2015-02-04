@@ -38,14 +38,21 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
+import com.pispower.network.SimpleMultipartEntity.ProcessListener;
 import com.pispower.util.MD5;
 import com.pispower.util.QueryString;
+import com.pispower.video.upload.UploadStatus;
 
 public class BaseClient {
 
-	private static final String tag = BaseClient.class.getName();
+	private Handler uploadingHander = null;
+
+	private static final String TAG = BaseClient.class.getName();
 	/**
 	 * 视频平台的地址。
 	 */
@@ -64,6 +71,14 @@ public class BaseClient {
 	 * 请从ovp 开发者支持/Restful API页面获取
 	 */
 	private final String accessSecret = "8f4a5d833d0e2d31e1eda4c811d2ae32";
+
+	public BaseClient() {
+
+	}
+
+	public BaseClient(Handler uploadingHander) {
+         this.uploadingHander=uploadingHander;
+	}
 
 	/**
 	 * 
@@ -134,12 +149,12 @@ public class BaseClient {
 			httpRequestBase = new HttpPost();
 		}
 		if (httpRequestBase == null) {
-			Log.e(tag, "httpRequestBase is null");
+			Log.w(TAG, "httpRequestBase is null");
 			throw new NullPointerException("httpRequestBase is null");
 			// return null;
 		}
 		httpRequestBase.setURI(uri);
-		Log.d(tag, "url is: " + httpRequestBase.getURI().toString());
+		Log.d(TAG, "url is: " + httpRequestBase.getURI().toString());
 		return httpRequestBase;
 	}
 
@@ -213,7 +228,7 @@ public class BaseClient {
 		try {
 			return MD5.getMD5(signOri);
 		} catch (NoSuchAlgorithmException e) {
-			Log.e(tag, e.getMessage());
+			Log.e(TAG, e.getMessage());
 		}
 		return signOri;
 	}
@@ -237,7 +252,26 @@ public class BaseClient {
 		final String context = this.apiHost + this.formatContext(apiContext);
 		QueryString addQueryString = addAditionParameters(queryString);
 		final HttpPost httppost = new HttpPost(context);
-		SimpleMultipartEntity simpleMultipartEntity = new SimpleMultipartEntity();
+		SimpleMultipartEntity simpleMultipartEntity;
+		if(uploadingHander!=null){
+			 simpleMultipartEntity = new SimpleMultipartEntity(
+					new ProcessListener() {
+						@Override
+						public void currentSendBytes(long bytes) {
+	                        	Message message = uploadingHander.obtainMessage();
+	                       		message.what = UploadStatus.UPLOADING.ordinal();
+	                       		Bundle bundle = new Bundle();
+	                       		bundle.putLong("currentValue", bytes);
+	                       		message.setData(bundle);
+	                       		uploadingHander.sendMessage(message);
+						}
+
+					});
+		}else{
+			 simpleMultipartEntity = new SimpleMultipartEntity();
+
+		}
+		
 		for (final Map.Entry<String, String[]> entry : addQueryString
 				.getParamMap().entrySet()) {
 			final String key = entry.getKey();
@@ -248,7 +282,7 @@ public class BaseClient {
 		}
 		simpleMultipartEntity.addPart("uploadFile", file);
 		httppost.setEntity(simpleMultipartEntity);
-		Log.i(tag, "file name is " + file.getName());
+		Log.d(TAG, "file name is " + file.getName());
 		final HttpClient httpClient = this.getDefaultHttpClient();
 		HttpResponse httpResponse = httpClient.execute(httppost);
 		JSONObject jsonObject = getJSONFromResponse(httpResponse);
@@ -256,15 +290,14 @@ public class BaseClient {
 		return jsonObject;
 	}
 
-	
 	public JSONObject postUrlEncodedForm(final String apiContext,
-			final QueryString queryString) throws IOException,
-			ParseException, JSONException {
-       
+			final QueryString queryString) throws IOException, ParseException,
+			JSONException {
+
 		final String context = this.apiHost + this.formatContext(apiContext);
 		QueryString addQueryString = addAditionParameters(queryString);
 		final HttpPost httppost = new HttpPost(context);
-		List<NameValuePair>formParams=new ArrayList<NameValuePair>();
+		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 		for (final Map.Entry<String, String[]> entry : addQueryString
 				.getParamMap().entrySet()) {
 			final String key = entry.getKey();
@@ -273,7 +306,8 @@ public class BaseClient {
 			}
 		}
 		// 按照平台规定，所有的参数必须进行一次 UTF8 转码。
-		 UrlEncodedFormEntity urlEncodedFormEntity=new UrlEncodedFormEntity(formParams,"UTF-8");
+		UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(
+				formParams, "UTF-8");
 		httppost.setEntity(urlEncodedFormEntity);
 		final HttpClient httpClient = this.getDefaultHttpClient();
 		HttpResponse httpResponse = httpClient.execute(httppost);
@@ -281,7 +315,7 @@ public class BaseClient {
 		httpClient.getConnectionManager().shutdown();
 		return jsonObject;
 	}
-	
+
 	private String encodeToUTF8(final String val) {
 		try {
 			return URLEncoder.encode(val, "utf-8");
@@ -340,7 +374,7 @@ public class BaseClient {
 
 			return new DefaultHttpClient(ccm, params);
 		} catch (Exception e) {
-			Log.i(tag, e.getMessage());
+			Log.e(TAG, e.getMessage());
 			return new DefaultHttpClient();
 		}
 	}

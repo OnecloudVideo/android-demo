@@ -26,7 +26,6 @@ public class PlayActivity extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("onCreate", "onCreate is called");
 		super.onCreate(savedInstanceState);
 		resources = getResources();
 		// 创建进度对话框
@@ -47,7 +46,7 @@ public class PlayActivity extends Activity implements
 		setContentView(R.layout.play_activity);
 		// 获得Intent，及其携带的Uri
 		Intent intent = getIntent();
-		String playUri = intent.getStringExtra("playUri");
+		String playUri = intent.getStringExtra(resources.getString(R.string.playUri));
 
 		// 获取VideoView 对象实例
 		videoView = (VideoView) findViewById(R.id.palyView);

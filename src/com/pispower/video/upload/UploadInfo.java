@@ -4,30 +4,13 @@ public class UploadInfo {
 	// 上传状态的枚举UploadStatus对象
 	private UploadStatus uploadStatus;
 
-	private int currentValue;
-
-	private int maxValue;
+	private long currentValue;
 
 	/**
 	 * 无参构造方法
 	 */
 	public UploadInfo() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * 有参构造方法
-	 * 
-	 * @param uploadStatus
-	 * @param currentValue
-	 * @param maxValue
-	 */
-	public UploadInfo(UploadStatus uploadStatus, int currentValue, int maxValue) {
-		super();
-		this.uploadStatus = uploadStatus;
-		this.currentValue = currentValue;
-		this.maxValue = maxValue;
 	}
 
 	/**
@@ -53,7 +36,7 @@ public class UploadInfo {
 	 * 
 	 * @return currentValue
 	 */
-	public int getCurrentValue() {
+	public long getCurrentValue() {
 		return currentValue;
 	}
 
@@ -62,26 +45,8 @@ public class UploadInfo {
 	 * 
 	 * @param currentValue
 	 */
-	public void setCurrentValue(int currentValue) {
+	public void setCurrentValue(long currentValue) {
 		this.currentValue = currentValue;
-	}
-
-	/**
-	 * 获取最大值
-	 * 
-	 * @return maxValue
-	 */
-	public int getMaxValue() {
-		return maxValue;
-	}
-
-	/**
-	 * 设置最大值
-	 * 
-	 * @param maxValue
-	 */
-	public void setMaxValue(int maxValue) {
-		this.maxValue = maxValue;
 	}
 
 }

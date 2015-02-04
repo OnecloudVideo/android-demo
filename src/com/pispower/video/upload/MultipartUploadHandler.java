@@ -11,7 +11,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.pispower.R;
 import com.pispower.video.VideoInfo;
@@ -23,6 +22,8 @@ public class MultipartUploadHandler extends Handler {
 	private VideoListAdapter videoListAdapter;
 	// 资源对象
 	private Resources resources;
+	
+	private long currentAlreadySendBytes;
 
 	/**
 	 * 有参构造方法
@@ -33,6 +34,7 @@ public class MultipartUploadHandler extends Handler {
 	public MultipartUploadHandler(VideoListAdapter adapter, Context context) {
 		this.videoListAdapter = adapter;
 		this.resources = context.getResources();
+		this.currentAlreadySendBytes=0;
 	}
 
 	@Override
@@ -45,7 +47,6 @@ public class MultipartUploadHandler extends Handler {
 			addUploadStartInfo(videoList, bundle);
 			break;
 		case UPLOADING:
-			// Bundle bundle=msg.getData();
 			addUploadingInfo(videoList, bundle);
 			break;
 		case UPLOAD_SUCCESS:
@@ -62,10 +63,10 @@ public class MultipartUploadHandler extends Handler {
 	private void addUploadFailInfo(List<VideoInfo> videoList) {
 		videoList.remove(0);
 		VideoInfo videoUploadFailInfo = new VideoInfo();
-		videoUploadFailInfo.setName("filename");
+		videoUploadFailInfo.setName(MutilUploadHandlerMessageParams.FILE_NAME);
 		videoUploadFailInfo.setStatus(resources
 				.getString(R.string.videoUploadFail));
-		videoUploadFailInfo.setSize("0");
+		videoUploadFailInfo.setSize(resources.getString(R.string.zeroSize));
 		videoList.add(0, videoUploadFailInfo);
 	}
 
@@ -78,7 +79,7 @@ public class MultipartUploadHandler extends Handler {
 		videoUploadSuccessInfo.setSize(videoInfo.getSize());
 		Map<String,String>maps=new HashMap<String,String>();
 		videoUploadSuccessInfo.setClarityUrlMap(maps);
-		maps.put("未知", bundle.getString("filePath"));
+		maps.put(resources.getString(R.string.unknownFilePath), bundle.getString(MutilUploadHandlerMessageParams.FILE_PATH));
 		videoList.add(0, videoUploadSuccessInfo);
 	}
 
@@ -86,18 +87,14 @@ public class MultipartUploadHandler extends Handler {
 		VideoInfo videoInfo = videoList.remove(0);
 		UploadInfo uploadingInfo = new UploadInfo();
 		uploadingInfo.setUploadStatus(UploadStatus.UPLOADING);
-		int maxValue = videoInfo.getUploadInfo().getMaxValue();
-		int curValue = bundle.getInt("currentValue");
-		Log.i("maxValue", maxValue + "");
-		Log.i("curValue", curValue + "");
-		uploadingInfo.setCurrentValue(curValue);
-		uploadingInfo.setMaxValue(maxValue);
+		long curValue = bundle.getLong(MutilUploadHandlerMessageParams.CURRENT_VALUE);
+		currentAlreadySendBytes+=curValue;
+		uploadingInfo.setCurrentValue(currentAlreadySendBytes);
 		VideoInfo videoUploadingInfo = new VideoInfo(uploadingInfo);
 		videoUploadingInfo.setName(videoInfo.getName());
 		videoUploadingInfo.setSize(videoInfo.getSize());
 		Format format = NumberFormat.getPercentInstance();
-		String curValueString = format.format(curValue / (maxValue * 1.0));
-		Log.i("Formate", curValueString);
+		String curValueString = format.format(currentAlreadySendBytes/Float.parseFloat(videoInfo.getSize()));
 		videoUploadingInfo.setStatus(curValueString);
 		videoList.add(0, videoUploadingInfo);
 	}
@@ -105,11 +102,10 @@ public class MultipartUploadHandler extends Handler {
 	private void addUploadStartInfo(List<VideoInfo> videoList, Bundle bundle) {
 		UploadInfo uploadInfo = new UploadInfo();
 		uploadInfo.setUploadStatus(UploadStatus.UPLOAD_START);
-		uploadInfo.setMaxValue(bundle.getInt("partNums"));
 		VideoInfo videoInfo = new VideoInfo(uploadInfo);
-		videoInfo.setName(bundle.getString("fileName"));
-		videoInfo.setSize(bundle.getString("fileSize"));
-		videoInfo.setStatus("0%");
+		videoInfo.setName(bundle.getString(MutilUploadHandlerMessageParams.FILE_NAME));
+		videoInfo.setSize(bundle.getString(MutilUploadHandlerMessageParams.FILE_SIZE));
+		videoInfo.setStatus(resources.getString(R.string.zeroStatus));
 		videoList.add(0, videoInfo);
 	}
 

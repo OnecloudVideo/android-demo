@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.text.DecimalFormat;
 
 import android.content.Context;
 import android.os.Environment;
@@ -22,7 +23,7 @@ public class FileUtil {
 	 */
 	public static void deleteAllFiles(File file) {
 		if (!file.exists()) {
-			Log.e(file.getAbsolutePath(), "file is not exist");
+			Log.w(file.getAbsolutePath(), "file is not exist");
 			return;
 		}
 		if (file.isFile()) {
@@ -52,15 +53,15 @@ public class FileUtil {
 		String state = Environment.getExternalStorageState();
 		if (!Environment.MEDIA_MOUNTED.equals(state)
 				&& !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			Log.i("ExternalStorageState", state);
+			Log.w("ExternalStorageState", state);
 			return null;
 		}
 		File dir = context.getExternalFilesDir(null);
 		if (dir == null) {
-			Log.i("dir", "is null");
+			Log.w("dir", "is null");
 			tempDir = context.getFilesDir().getAbsolutePath();
 		} else {
-			Log.i(dir.getAbsolutePath(), " is not null");
+			Log.d(dir.getAbsolutePath(), " is not null");
 			tempDir = dir.getAbsolutePath();
 		}
 		return tempDir;
@@ -76,15 +77,15 @@ public class FileUtil {
 		String state = Environment.getExternalStorageState();
 		if (!Environment.MEDIA_MOUNTED.equals(state)
 				&& !Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			Log.i("ExternalStorageState", state);
+			Log.w("ExternalStorageState", state);
 			return null;
 		}
 		File dir = context.getExternalCacheDir();
 		if (dir == null) {
-			Log.i("dir", "is null");
+			Log.w("dir", "is null");
 			tempDir = context.getCacheDir().getAbsolutePath();
 		} else {
-			Log.i(dir.getAbsolutePath(), " is not null");
+			Log.d(dir.getAbsolutePath(), " is not null");
 			tempDir = dir.getAbsolutePath();
 		}
 		return tempDir;
@@ -106,9 +107,9 @@ public class FileUtil {
 			objectOutputStream.writeObject(object);
 			objectOutputStream.close();
 		} catch (FileNotFoundException e) {
-			Log.i("FileNotFoundException", e.getMessage());
+			Log.e("FileNotFoundException", e.getMessage());
 		} catch (IOException e) {
-			Log.i("IOException", e.getMessage());
+			Log.e("IOException", e.getMessage());
 		}
   
 	}
@@ -129,17 +130,29 @@ public class FileUtil {
 			try {
 				returnObject=objectInputStream.readObject();
 			} catch (ClassNotFoundException e) {
-				Log.i("ClassNotFoundException", e.getMessage()); 
+				Log.e("ClassNotFoundException", e.getMessage()); 
 			}
 			objectInputStream.close();
 		} catch (StreamCorruptedException e) {
-			Log.i("StreamCorruptedException", e.getMessage()); 
+			Log.e("StreamCorruptedException", e.getMessage()); 
 		} catch (FileNotFoundException e) {
-			Log.i("FileNotFoundException", e.getMessage()); 
+			Log.e("FileNotFoundException", e.getMessage()); 
 		} catch (IOException e) {
-			Log.i("IOException", e.getMessage()); 
+			Log.e("IOException", e.getMessage()); 
 		}
 		
 		return returnObject;
 	}
+	/**
+	 * 把文件的字节数大小转换为相应的大小，转换的范围为 "B", "kB", "MB", "GB", "TB","PB","EB"。
+	 * @param size
+	 * @return
+	 */
+	 public static String autoConvertFileLength(long size) {
+	     if(size <= 0) return "0";
+	     final String[] units = new String[] { "B", "kB", "MB", "GB", "TB","PB","EB"};
+	     int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+	     return new DecimalFormat("#,##0.##").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	 }
+	
 }

@@ -15,10 +15,23 @@ import android.widget.TextView;
 
 import com.pispower.R;
 import com.pispower.util.DpPxConvertion;
+import com.pispower.util.FileUtil;
 import com.pispower.util.MediaUtil;
+import com.pispower.util.StringUtil;
 
 public class VideoListAdapter extends BaseAdapter {
-
+    //文件名的最大长度
+	private static final int MAX_FILE_NAME_LENGTH=20;
+	//progressBar 最大的进度值
+	private static final int PROGRESS_MAX_VALUE=100;
+	//progressBar 初始化的进度值
+	private static final int PROGRESS_INITVALUE=0;
+	//控件的padding距离
+	private static final int LEFT=5;
+	private static final int TOP=0;
+	private static final int RIGHT=0;
+	private static final int BOTTOM=0;
+	
 	// 视频信息列表
 	private List<VideoInfo> videoInfoList;
 
@@ -101,8 +114,8 @@ public class VideoListAdapter extends BaseAdapter {
 			setProgressBarProcess(videoInfo, view, holder);
 		}
 		String fileName = videoInfoList.get(position).getName();
-		if (fileName.length() > 20) {
-			fileName = fileName.substring(fileName.length() - 20);
+		if (fileName.length() > VideoListAdapter.MAX_FILE_NAME_LENGTH) {
+			fileName = fileName.substring(fileName.length() - MAX_FILE_NAME_LENGTH);
 		}
 		if (MediaUtil.isAudioFileType(fileName)) {
 			holder.videoImage.setImageDrawable(context.getResources()
@@ -140,8 +153,8 @@ public class VideoListAdapter extends BaseAdapter {
 	private void setViewHoldView(VideoInfo videoInfo, RelativeLayout view,
 			final ViewHolder viewHolder, ProgressBar progressBar) {
 		if (videoInfo.uploadInfo != null) {
-			progressBar.setMax(videoInfo.uploadInfo.getMaxValue());
-			progressBar.setProgress(0);
+			progressBar.setMax(PROGRESS_MAX_VALUE);
+			progressBar.setProgress(PROGRESS_INITVALUE);
 			view.addView(viewHolder.progressBar);
 			viewHolder.view = viewHolder.progressBar;
 		} else {
@@ -156,14 +169,20 @@ public class VideoListAdapter extends BaseAdapter {
 	 */
 	private void setTextViewText(int position, RelativeLayout view,
 			ViewHolder holder) {
+		String fileLength=videoInfoList.get(position).getSize();
+		if(!StringUtil.isBlank(fileLength)){
+			holder.size.setText(FileUtil.autoConvertFileLength(Long.parseLong(fileLength)));
+		}else{
+			holder.size.setText(context.getResources().getString(R.string.emptyString));
+		}
+		
 		if (holder.size != holder.view) {
 			view.removeView(holder.view);
-			holder.size.setText(videoInfoList.get(position).getSize());
 			holder.view = holder.size;
 			view.addView(holder.size);
-		} else {
-			holder.size.setText(videoInfoList.get(position).getSize());
-		}
+		}  
+		//现在没有获取视频大小的rest api 接口，所有对其进行隐藏处理。
+		//holder.size.setVisibility(View.INVISIBLE);
 	}
 
 	/*
@@ -171,17 +190,17 @@ public class VideoListAdapter extends BaseAdapter {
 	 */
 	private void setProgressBarProcess(VideoInfo videoInfo,
 			RelativeLayout view, ViewHolder holder) {
+		holder.progressBar.setMax(PROGRESS_MAX_VALUE);
+	    long currentValue=	videoInfo.uploadInfo.getCurrentValue();
+	    float totalSize=	Float.parseFloat(videoInfo.getSize());
+		int progress=(int)(currentValue/totalSize*100);
+		holder.progressBar.setProgress(progress);
+
 		if (holder.progressBar != holder.view) {
 			view.removeView(holder.view);
-			holder.progressBar.setMax(videoInfo.uploadInfo.getMaxValue());
-			holder.progressBar.setProgress(videoInfo.uploadInfo
-					.getCurrentValue());
-			holder.view = holder.progressBar;
+		   holder.view = holder.progressBar;
 			view.addView(holder.progressBar);
-		} else {
-			holder.progressBar.setProgress(videoInfo.uploadInfo
-					.getCurrentValue());
-		}
+		}  
 	}
 
 	/*
@@ -189,7 +208,7 @@ public class VideoListAdapter extends BaseAdapter {
 	 */
 	private TextView createTextView(final ViewHolder viewHolder) {
 		TextView sizeTextView = new TextView(this.context);
-		sizeTextView.setPadding(DpPxConvertion.dpToPx(5, context), 0, 0, 0);
+		sizeTextView.setPadding(DpPxConvertion.dpToPx(LEFT, context), TOP, RIGHT, BOTTOM);
 		RelativeLayout.LayoutParams textViewParams = new RelativeLayout.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -216,7 +235,7 @@ public class VideoListAdapter extends BaseAdapter {
 				viewHolder.videoImage.getId());
 		params.addRule(RelativeLayout.RIGHT_OF, viewHolder.videoImage.getId());
 		// params.setMargins(left, top, right, bottom)
-		progressBar.setPadding(DpPxConvertion.dpToPx(5, context), 0, 0, 0);
+		progressBar.setPadding(DpPxConvertion.dpToPx(LEFT, context), TOP, RIGHT, BOTTOM);
 		progressBar.setLayoutParams(params);
 		return progressBar;
 	}

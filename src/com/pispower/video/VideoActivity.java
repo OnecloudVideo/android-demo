@@ -57,21 +57,22 @@ public class VideoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_video);
+		// 获取资源对象
+		resources = getResources();
 		// 获取Intent
 		Intent intent = getIntent();
 		// 获取ActionBar 并设置
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_HOME);
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setTitle(intent.getStringExtra("folderName"));
-		// 获取资源对象
-		resources = getResources();
+		actionBar.setTitle(intent.getStringExtra(resources.getString(R.string.folderName)));
+		
 
 		progressDialog = ProgressDialog.show(this,
 				resources.getString(R.string.loading),
 				resources.getString(R.string.loadDescription));
 
-		curCatalogId = intent.getStringExtra("catalogId");
+		curCatalogId = intent.getStringExtra(resources.getString(R.string.catalogId));
 
 	    videoListView = (PullRefreshListView) findViewById(R.id.videoList);
 		videoEmpTextView = (TextView) findViewById(R.id.videoEmptyHint);
@@ -119,8 +120,8 @@ public class VideoActivity extends Activity {
 								videoInfo.setId(jsonObject.getString("id"));
 								String fileName = jsonObject.getString("name");
 								videoInfo.setName(fileName);
-								// 现在restful api 中的返回不包含大小，所以在此给固定的大小100MB
-								videoInfo.setSize("100MB");
+								// 现在restful api 中的返回不包含大小，所以设置为空字符串
+								videoInfo.setSize(resources.getString(R.string.emptyString));
 								String status = jsonObject.getString("status");
 								status = StatusTransition.toChinese(status,resources);
 								videoInfo.setStatus(status);
@@ -206,19 +207,19 @@ public class VideoActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode != videoOrAudioSelectCode) {
-			Log.i(TAG, "request Code " + "=" + requestCode + " , !="
+			Log.w(TAG, "request Code " + "=" + requestCode + " , !="
 					+ videoOrAudioSelectCode);
 			return;
 		}
 		if (data == null) {
-			Log.i(TAG, "no any content return");
+			Log.w(TAG, "no any content return");
 			return;
 		}
 		Uri originalUri = data.getData();
 		String filePath = ContentUriFileConvertion
 				.convertConentUriToFileString(originalUri, this);
 		File file = new File(filePath);
-		Log.i(TAG, file.length() + "");
+		Log.d(TAG, file.length() + "");
 		MultipartUploadHandler multipartUploadHandler = new MultipartUploadHandler(
 				videoListAdapter, this);
 		String applicationFilesDir = FileUtil
@@ -229,7 +230,7 @@ public class VideoActivity extends Activity {
 		String dir = mutilpartUploadDir + File.separator
 				+ file.getName().replace('.', '_') + new Random().nextLong();
 		File dirFile = new File(dir);
-		Log.i(TAG, "temp file dir is " + dir);
+		Log.d(TAG, "temp file dir is " + dir);
 		// 开启线程，用于上传
 		MultipartUploadThread multipartUploadThread = new MultipartUploadThread(
 				multipartUploadHandler, file, dirFile, this.curCatalogId);

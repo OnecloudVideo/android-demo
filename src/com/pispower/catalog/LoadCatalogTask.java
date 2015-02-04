@@ -78,7 +78,7 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 			}
 
 		} catch (Exception localException) {
-			Log.i(TAG, localException.getMessage());
+			Log.e(TAG, localException.getMessage());
 			return null;
 		}
 		return catalogInfos;
@@ -91,18 +91,13 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 			this.progressDialog.dismiss();
 		}
 		// 为ListView设置Adapter
-		// CatalogListViewAdapter listViewAdapter = null;
 		if ((!isCancelled()) && (paramList != null)) {
 			this.listViewEmptyHintTextView.setText(R.string.noAnyVideos);
 			this.catalogListViewAdapter.setDataList(paramList);
-			// listViewAdapter = new CatalogListViewAdapter(paramList,
-			// this.context);
 		} else {
 			this.listViewEmptyHintTextView.setText(R.string.loadError);
 			this.catalogListViewAdapter
 					.setDataList(new ArrayList<CatalogInfo>());
-			// listViewAdapter = new CatalogListViewAdapter(
-			// new ArrayList<CatalogInfo>(), this.context);
 		}
 		this.catalogListViewAdapter.notifyDataSetChanged();
 		return;

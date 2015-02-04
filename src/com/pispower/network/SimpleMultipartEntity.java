@@ -18,11 +18,13 @@ import android.util.Log;
 
 public class SimpleMultipartEntity implements HttpEntity {
 
+	private  ProcessListener processListener;
+	
 	private final static char[] MULTIPART_CHARS = "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 			.toCharArray();
 	private static final String tag = "SimpleMultipartEntity";
 	private String boundary = null;
-
+   
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	boolean isSetLast = false;
 	boolean isSetFirst = false;
@@ -30,6 +32,17 @@ public class SimpleMultipartEntity implements HttpEntity {
 	/**
 	 * 构造方法
 	 */
+	public SimpleMultipartEntity(ProcessListener processListener) {
+		final StringBuffer buf = new StringBuffer();
+		final Random rand = new Random();
+		for (int i = 0; i < 30; i++) {
+			buf.append(MULTIPART_CHARS[rand.nextInt(MULTIPART_CHARS.length)]);
+		}
+		this.boundary = buf.toString();
+        this.processListener=processListener;
+	}
+
+	
 	public SimpleMultipartEntity() {
 		final StringBuffer buf = new StringBuffer();
 		final Random rand = new Random();
@@ -37,9 +50,8 @@ public class SimpleMultipartEntity implements HttpEntity {
 			buf.append(MULTIPART_CHARS[rand.nextInt(MULTIPART_CHARS.length)]);
 		}
 		this.boundary = buf.toString();
-
 	}
-
+	
 	/**
 	 * 根据是否需要写入第一个boundary分割符
 	 * 
@@ -121,10 +133,13 @@ public class SimpleMultipartEntity implements HttpEntity {
 			out.write(type.getBytes());
 			out.write("Content-Transfer-Encoding: binary\r\n\r\n".getBytes());
 
-			final byte[] tmp = new byte[4096];
+			final byte[] tmp = new byte[1024];
 			int l = 0;
 			while ((l = fin.read(tmp)) != -1) {
 				out.write(tmp, 0, l);
+				if(processListener!=null){
+					processListener.currentSendBytes(l);
+				}
 			}
 			out.flush();
 		} catch (final IOException e) {
@@ -204,10 +219,10 @@ public class SimpleMultipartEntity implements HttpEntity {
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 
-	// @Override
-	// public void writeTo(OutputStream outstream) throws IOException {
-	// // TODO Auto-generated method stub
-	//
-	// }
+	
+ public interface ProcessListener{
+		
+		public abstract void currentSendBytes(long bytes);
+	}
 
 }
