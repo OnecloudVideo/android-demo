@@ -1,7 +1,11 @@
 package com.pispower.catalog;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -19,6 +23,9 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 	private CatalogListViewAdapter catalogListViewAdapter;
 	// 资源对象
 	private Resources resources;
+	
+	@SuppressLint("SimpleDateFormat")
+	private SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * 有参构造方法
@@ -50,9 +57,9 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 			}
 			catalogInfo.setId(catalogJSONObject.getString("id"));
 			catalogInfo.setName(catalogJSONObject.getString("name"));
-			catalogInfo.setHoldVideoNums(catalogJSONObject
-					.getString("videoNumber"));
-			catalogInfo.setLastModifiedTime(catalogJSONObject.getString("updateTime"));
+			catalogInfo.setHoldVideoNums(this.context.getResources().getString(R.string.zero));
+		    
+			catalogInfo.setLastModifiedTime(dateFormat.format(new Date()));
 			return catalogInfo;
 		} catch (Exception localException) {
 			Log.e(TAG, localException.getMessage());
