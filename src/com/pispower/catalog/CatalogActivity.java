@@ -97,16 +97,9 @@ public class CatalogActivity extends Activity {
 								CatalogInfo catalogInfo = new CatalogInfo();
 								catalogInfo.setId(catalog.getString("id"));
 								catalogInfo.setName(catalog.getString("name"));
-								// 获取指定id的分类
-								JSONObject specialCatalog = videoClient.getCatalog(catalog
-										.getString("id"));
-								if (specialCatalog != null) {
-									catalogInfo.setHoldVideoNums(specialCatalog
-											.getString("videoNumber"));
-								} else {
-									catalogInfo.setHoldVideoNums(getResources()
-											.getString(R.string.zero));
-								}
+								catalogInfo.setHoldVideoNums(catalog
+										.getString("videoNumber"));
+								catalogInfo.setLastModifiedTime(catalog.getString("updateTime"));
 								catalogInfos.add(catalogInfo);
 							}
 							
@@ -142,7 +135,7 @@ public class CatalogActivity extends Activity {
 		});
 		// 开启异步任务，用于从亦云视频下载视频分类
 		new LoadCatalogTask(this.progressDialog, 
-				this.listEmptyHintTextView,this.catalogListViewAdapter, this).execute(new Void[] { null,
+				this.listEmptyHintTextView,this.catalogListViewAdapter).execute(new Void[] { null,
 				null });
 		
 	}

@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -17,8 +16,7 @@ import com.pispower.network.VideoClient;
 
 public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	private static final String TAG = "LoadPackageTask";
-	// 场景对象
-	private Context context;
+ 
 	// TextView对象
 	private TextView listViewEmptyHintTextView;
 	// ListView 对象
@@ -38,12 +36,11 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	 */
 	public LoadCatalogTask(ProgressDialog progressDialog,
 			TextView listViewEmptyHintTextView,
-			CatalogListViewAdapter catalogListViewAdapter, Context context) {
+			CatalogListViewAdapter catalogListViewAdapter) {
 		this.progressDialog = progressDialog;
 		// this.listView = listView;
 		this.listViewEmptyHintTextView = listViewEmptyHintTextView;
 		this.catalogListViewAdapter = catalogListViewAdapter;
-		this.context = context;
 	}
 
 	@Override
@@ -64,16 +61,9 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 				CatalogInfo catalogInfo = new CatalogInfo();
 				catalogInfo.setId(catalog.getString("id"));
 				catalogInfo.setName(catalog.getString("name"));
-				// 获取指定id的分类
-				JSONObject specialCatalog = videoClient.getCatalog(catalog
-						.getString("id"));
-				if (specialCatalog != null) {
-					catalogInfo.setHoldVideoNums(specialCatalog
-							.getString("videoNumber"));
-				} else {
-					catalogInfo.setHoldVideoNums(this.context.getResources()
-							.getString(R.string.zero));
-				}
+				catalogInfo.setHoldVideoNums(catalog
+						.getString("videoNumber"));
+				catalogInfo.setLastModifiedTime(catalog.getString("updateTime"));
 				catalogInfos.add(catalogInfo);
 			}
 

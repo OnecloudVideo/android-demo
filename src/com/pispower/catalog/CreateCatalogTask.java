@@ -50,17 +50,9 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 			}
 			catalogInfo.setId(catalogJSONObject.getString("id"));
 			catalogInfo.setName(catalogJSONObject.getString("name"));
-
-			// 通过VideoClient来获取指定id分类的信息
-			JSONObject specialCatalogJSONObject = videoClient
-					.getCatalog(catalogJSONObject.getString("id"));
-			if (specialCatalogJSONObject == null) {
-				catalogInfo.setHoldVideoNums(this.resources
-						.getString(R.string.zero));
-			} else {
-				catalogInfo.setHoldVideoNums(specialCatalogJSONObject
-						.getString("videoNumber"));
-			}
+			catalogInfo.setHoldVideoNums(catalogJSONObject
+					.getString("videoNumber"));
+			catalogInfo.setLastModifiedTime(catalogJSONObject.getString("updateTime"));
 			return catalogInfo;
 		} catch (Exception localException) {
 			Log.e(TAG, localException.getMessage());
