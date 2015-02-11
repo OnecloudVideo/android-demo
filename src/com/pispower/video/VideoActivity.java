@@ -125,7 +125,7 @@ public class VideoActivity extends Activity {
 								String status = jsonObject.getString("status");
 								status = StatusTransition.toChinese(status,resources);
 								videoInfo.setStatus(status);
-								if (status.equals(resources.getString(R.string.FINISH))) {
+								if (status.equals(resources.getString(R.string.AUDIT_SUCCESS))) {
 									Map<String, String> clarityUrlMap = videoClient.getVideoEmbedCode(
 											jsonObject.getString("id"),
 											resources

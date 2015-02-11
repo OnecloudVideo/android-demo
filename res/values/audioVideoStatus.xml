@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="PROCESSING">正在处理</string>
-    <string name="PROCESSINGENGLISH">PROCESSING</string>
-    <string name="FINISH">可发布</string>
-     <string name="FINISHENGLISH">FINISH</string>
+    <string name="PROCESSING">处理中</string>
+    <string name="PROCESSING_ENGLISH">PROCESSING</string>
+     <string name="UNAUDIT">未审核</string>
+     <string name="UNAUDIT_ENGLISH">UNAUDIT</string>
+     <string name="AUDIT_SUCCESS">可发布</string>
+     <string name="AUDIT_SUCCESS_ENGLISH">AUDIT_SUCCESS</string>
+     <string name="FAIL">转码失败</string>
+     <string name="FAIL_ENGLISH">FAIL</string>
+    <string name="AUDIT_FAIL">禁播</string>
+    <string name="AUDIT_FAIL_ENGLISH">AUDIT_FAIL</string>
     <string name="UNKNOWNSTATUS">未知</string>
 </resources>
