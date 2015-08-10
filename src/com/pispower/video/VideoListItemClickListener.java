@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.pispower.R;
 import com.pispower.util.NetworkInspection;
 import com.pispower.video.play.PlayActivity;
+import com.pispower.video.sdk.video.VideoInfo;
 
 public class VideoListItemClickListener implements OnItemClickListener {
 
@@ -49,7 +50,7 @@ public class VideoListItemClickListener implements OnItemClickListener {
 		
 		 HeaderViewListAdapter listAdapter = (HeaderViewListAdapter) parent.getAdapter();  
 		 VideoListAdapter adapter = (VideoListAdapter)listAdapter.getWrappedAdapter(); 
-		   VideoInfo videoPlayList = (VideoInfo) 
+		   VideoInfo videoPlayList = (VideoInfo)
 					adapter.getItem(position);
 
 		if (checkIsCanPlay(videoPlayList)) {

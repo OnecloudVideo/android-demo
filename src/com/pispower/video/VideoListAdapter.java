@@ -15,9 +15,10 @@ import android.widget.TextView;
 
 import com.pispower.R;
 import com.pispower.util.DpPxConvertion;
-import com.pispower.util.FileUtil;
 import com.pispower.util.MediaUtil;
 import com.pispower.util.StringUtil;
+import com.pispower.video.sdk.util.FileUtil;
+import com.pispower.video.sdk.video.VideoInfo;
 
 public class VideoListAdapter extends BaseAdapter {
     //文件名的最大长度

@@ -3,9 +3,6 @@ package com.pispower.catalog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -16,7 +13,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +20,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pispower.R;
-import com.pispower.network.VideoClient;
 import com.pispower.util.PullRefreshListView;
 import com.pispower.util.PullRefreshListView.OnRefreshListener;
+import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.catalog.CatalogInfo;
 
- 
 
 public class CatalogActivity extends Activity {
 	
@@ -81,34 +77,7 @@ public class CatalogActivity extends Activity {
 
 					@Override
 					protected List<CatalogInfo> doInBackground(Void... paramArrayOfVoid) {
-						// 创建用于HTTP通信的VideoClient对象实例
-						VideoClient videoClient = new VideoClient();
-						// 创建空的分类信息列表
-						List<CatalogInfo> catalogInfos = new ArrayList<CatalogInfo>();
-						try {
-							// 获取所有的分类
-							JSONArray catalogs = videoClient.listCatalog();
-							if (catalogs == null) {
-								return catalogInfos;
-							}
-							for (int i = 0; i < catalogs.length(); i++) {
-
-								JSONObject catalog = catalogs.getJSONObject(i);
-								CatalogInfo catalogInfo = new CatalogInfo();
-								catalogInfo.setId(catalog.getString("id"));
-								catalogInfo.setName(catalog.getString("name"));
-								catalogInfo.setHoldVideoNums(catalog
-										.getString("videoNumber"));
-								catalogInfo.setLastModifiedTime(catalog.getString("updateTime"));
-								catalogInfos.add(catalogInfo);
-							}
-							
-
-						} catch (Exception localException) {
-							Log.e(TAG, localException.getMessage());
-							return null;
-						}
-						return catalogInfos;
+						return VideoSDK.getCatalogService().list();
 					}
 					
 					@Override

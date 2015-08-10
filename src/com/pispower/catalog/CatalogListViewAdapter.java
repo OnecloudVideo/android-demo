@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.pispower.R;
+import com.pispower.video.sdk.catalog.CatalogInfo;
 
 public class CatalogListViewAdapter extends BaseAdapter {
 	// 场景对象用来获取 LayoutInflater

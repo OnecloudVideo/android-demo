@@ -3,16 +3,13 @@ package com.pispower.catalog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.pispower.R;
-import com.pispower.network.VideoClient;
+import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.catalog.CatalogInfo;
 
 public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	private static final String TAG = "LoadPackageTask";
@@ -30,9 +27,9 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	 * 有参构造方法
 	 * 
 	 * @param progressDialog
-	 * @param listView
 	 * @param listViewEmptyHintTextView
-	 * @param context
+	 * @param catalogListViewAdapter
+	 *
 	 */
 	public LoadCatalogTask(ProgressDialog progressDialog,
 			TextView listViewEmptyHintTextView,
@@ -45,33 +42,7 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 
 	@Override
 	protected List<CatalogInfo> doInBackground(Void... paramArrayOfVoid) {
-		// 创建用于HTTP通信的VideoClient对象实例
-		VideoClient videoClient = new VideoClient();
-		// 创建空的分类信息列表
-		List<CatalogInfo> catalogInfos = new ArrayList<CatalogInfo>();
-		try {
-			// 获取所有的分类
-			JSONArray catalogs = videoClient.listCatalog();
-			if (catalogs == null) {
-				return catalogInfos;
-			}
-			for (int i = 0; i < catalogs.length(); i++) {
-
-				JSONObject catalog = catalogs.getJSONObject(i);
-				CatalogInfo catalogInfo = new CatalogInfo();
-				catalogInfo.setId(catalog.getString("id"));
-				catalogInfo.setName(catalog.getString("name"));
-				catalogInfo.setHoldVideoNums(catalog
-						.getString("videoNumber"));
-				catalogInfo.setLastModifiedTime(catalog.getString("updateTime"));
-				catalogInfos.add(catalogInfo);
-			}
-
-		} catch (Exception localException) {
-			Log.e(TAG, localException.getMessage());
-			return null;
-		}
-		return catalogInfos;
+		return new VideoSDK().getCatalogService().list();
 	}
 
 	@Override
@@ -86,6 +57,8 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 			this.catalogListViewAdapter.setDataList(paramList);
 		} else {
 			this.listViewEmptyHintTextView.setText(R.string.loadError);
+
+
 			this.catalogListViewAdapter
 					.setDataList(new ArrayList<CatalogInfo>());
 		}

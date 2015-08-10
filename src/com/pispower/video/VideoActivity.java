@@ -3,11 +3,7 @@ package com.pispower.video;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -25,12 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pispower.R;
-import com.pispower.network.VideoClient;
 import com.pispower.util.ContentUriFileConvertion;
-import com.pispower.util.FileUtil;
 import com.pispower.util.PullRefreshListView;
 import com.pispower.util.PullRefreshListView.OnRefreshListener;
-import com.pispower.util.StatusTransition;
+import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.util.FileUtil;
+import com.pispower.video.sdk.video.VideoInfo;
 import com.pispower.video.upload.MultipartUploadHandler;
 import com.pispower.video.upload.MultipartUploadThread;
 
@@ -89,7 +85,7 @@ public class VideoActivity extends Activity {
 			@Override
 			public void onRefresh() {
 				
-				List<VideoInfo> videoInfos=	videoListAdapter.getVideoInfoList(); 
+				List<VideoInfo> videoInfos=	videoListAdapter.getVideoInfoList();
 				if(videoInfos!=null&&!videoInfos.isEmpty()){
 					if(videoInfos.get(0).uploadInfo!=null){
 						videoListView.onRefreshComplete();
@@ -102,45 +98,8 @@ public class VideoActivity extends Activity {
 					@Override
 					protected List<VideoInfo> doInBackground(String... params) {
 						String catalogId = params[0];
-						VideoClient videoClient = new VideoClient();
-						List<VideoInfo> videoInfoList = new ArrayList<VideoInfo>();
-						try {
-							JSONArray jsonArray = videoClient
-									.listVideo(catalogId);
-							if (jsonArray == null) {
-								return videoInfoList;
-							}
-							if (jsonArray.length() == 0) {
-								return videoInfoList;
-							}
-							for (int i = 0; i < jsonArray.length(); i++) {
-								VideoInfo videoInfo = new VideoInfo();
-								JSONObject jsonObject = jsonArray
-										.getJSONObject(i);
-								videoInfo.setId(jsonObject.getString("id"));
-								String fileName = jsonObject.getString("name");
-								videoInfo.setName(fileName);
-								// 现在restful api 中的返回不包含大小，所以设置为空字符串
-								videoInfo.setSize(resources.getString(R.string.emptyString));
-								String status = jsonObject.getString("status");
-								status = StatusTransition.toChinese(status,resources);
-								videoInfo.setStatus(status);
-								if (status.equals(resources.getString(R.string.AUDIT_SUCCESS))) {
-									Map<String, String> clarityUrlMap = videoClient.getVideoEmbedCode(
-											jsonObject.getString("id"),
-											resources
-													.getString(R.string.audioClarity));
-									videoInfo.setClarityUrlMap(clarityUrlMap);
-								} else {
-									videoInfo.setClarityUrlMap(null);
-								}
-								videoInfoList.add(videoInfo);
-							}
-							return videoInfoList;
-						} catch (Exception e) {
-							Log.e(TAG, e.getMessage());
-							return null;
-						}
+
+						return new VideoSDK().getVideoService().list(catalogId);
 					}
 					@Override
 					protected void onPostExecute(List<VideoInfo> result) {
@@ -218,6 +177,7 @@ public class VideoActivity extends Activity {
 		Uri originalUri = data.getData();
 		String filePath = ContentUriFileConvertion
 				.convertConentUriToFileString(originalUri, this);
+
 		File file = new File(filePath);
 		Log.d(TAG, file.length() + "");
 		MultipartUploadHandler multipartUploadHandler = new MultipartUploadHandler(

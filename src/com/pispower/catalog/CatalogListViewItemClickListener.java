@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.pispower.R;
 import com.pispower.util.NetworkInspection;
 import com.pispower.video.VideoActivity;
+import com.pispower.video.sdk.catalog.CatalogInfo;
 
 public class CatalogListViewItemClickListener implements
 		AdapterView.OnItemClickListener {
@@ -33,7 +34,7 @@ public class CatalogListViewItemClickListener implements
 			Intent intent = new Intent(this.context, VideoActivity.class);
 		   HeaderViewListAdapter listAdapter = (HeaderViewListAdapter) parent.getAdapter();  
 		   CatalogListViewAdapter adapter = (CatalogListViewAdapter)listAdapter.getWrappedAdapter(); 
-			CatalogInfo localVideoPackageInfo = (CatalogInfo) 
+			CatalogInfo localVideoPackageInfo = (CatalogInfo)
 					adapter.getItem(position);
 		    Resources resources=	this.context.getResources();
 			intent.putExtra(resources.getString(R.string.catalogId), localVideoPackageInfo.getId());

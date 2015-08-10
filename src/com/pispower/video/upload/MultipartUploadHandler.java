@@ -13,8 +13,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.pispower.R;
-import com.pispower.video.VideoInfo;
 import com.pispower.video.VideoListAdapter;
+import com.pispower.video.sdk.upload.UploadInfo;
+import com.pispower.video.sdk.upload.UploadStatus;
+import com.pispower.video.sdk.video.VideoInfo;
 
 public class MultipartUploadHandler extends Handler {
 
@@ -86,6 +88,7 @@ public class MultipartUploadHandler extends Handler {
 	private void addUploadingInfo(List<VideoInfo> videoList, Bundle bundle) {
 		VideoInfo videoInfo = videoList.remove(0);
 		UploadInfo uploadingInfo = new UploadInfo();
+
 		uploadingInfo.setUploadStatus(UploadStatus.UPLOADING);
 		long curValue = bundle.getLong(MutilUploadHandlerMessageParams.CURRENT_VALUE);
 		currentAlreadySendBytes+=curValue;
