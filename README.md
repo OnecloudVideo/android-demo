@@ -5,6 +5,7 @@
   1.下载android-demo.
   2.配置videosdk.properties文件, videosdk.properties位于src目录下，配置项accessKey和accessSecrect，请登陆video.pispower.com获得
   3.编译运行。
+  
 
   
 
