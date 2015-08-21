@@ -2,7 +2,9 @@ package com.pispower.video.upload;
 
 import android.os.Handler;
 
+import com.pispower.AppContext;
 import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.multipart.MultipartUploadRequest;
 
 import java.io.File;
 
@@ -37,7 +39,7 @@ public class MultipartUploadThread extends Thread {
 	@Override
 	public void run() {
 
-		VideoSDK.getMultipartService().upload(this.uploadFile, this.tempDir, this.handler,this.curCatalogId);
+		AppContext.getSDK().getMultipartService().upload(new MultipartUploadRequest(this.uploadFile, this.tempDir, this.handler,this.curCatalogId));
 		
 		super.run();
 	}

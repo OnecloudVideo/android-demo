@@ -8,9 +8,12 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.pispower.AppContext;
 import com.pispower.R;
 import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.catalog.request.CatalogCreateRequest;
 import com.pispower.video.sdk.catalog.CatalogInfo;
+import com.pispower.video.sdk.core.VideoSDKException;
 
 public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 	private static final String TAG = "CreateFileTask";
@@ -38,7 +41,11 @@ public class CreateCatalogTask extends AsyncTask<String, Void, CatalogInfo> {
 		// 获得新建分类的名字
 		String catalogName = paramArrayOfString[0];
 
-		return new VideoSDK().getCatalogService().create(catalogName);
+		try {
+			return AppContext.getSDK().getCatalogService().create(new CatalogCreateRequest(catalogName));
+		} catch (VideoSDKException e) {
+			return null;
+		}
 	}
 
 	@Override

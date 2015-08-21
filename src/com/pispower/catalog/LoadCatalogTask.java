@@ -5,11 +5,15 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.pispower.AppContext;
 import com.pispower.R;
 import com.pispower.video.sdk.VideoSDK;
 import com.pispower.video.sdk.catalog.CatalogInfo;
+import com.pispower.video.sdk.catalog.request.CatalogListRequest;
+import com.pispower.video.sdk.core.VideoSDKException;
 
 public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 	private static final String TAG = "LoadPackageTask";
@@ -42,7 +46,12 @@ public class LoadCatalogTask extends AsyncTask<Void, Void, List<CatalogInfo>> {
 
 	@Override
 	protected List<CatalogInfo> doInBackground(Void... paramArrayOfVoid) {
-		return new VideoSDK().getCatalogService().list();
+		try {
+			return AppContext.getSDK().getCatalogService().list(new CatalogListRequest());
+		} catch (VideoSDKException e) {
+			Log.e(TAG, e.getMessage());
+			return  null;
+		}
 	}
 
 	@Override

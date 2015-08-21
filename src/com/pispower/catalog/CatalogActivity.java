@@ -13,17 +13,21 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.pispower.AppContext;
 import com.pispower.R;
 import com.pispower.util.PullRefreshListView;
 import com.pispower.util.PullRefreshListView.OnRefreshListener;
 import com.pispower.video.sdk.VideoSDK;
-import com.pispower.video.sdk.catalog.CatalogInfo;
+import com.pispower.video.sdk.catalog.*;
+import com.pispower.video.sdk.catalog.request.CatalogListRequest;
+import com.pispower.video.sdk.core.VideoSDKException;
 
 
 public class CatalogActivity extends Activity {
@@ -72,18 +76,24 @@ public class CatalogActivity extends Activity {
 				// If this is a webservice call, it might be asynchronous so
 				// you would have to call listView.onRefreshComplete(); when
 				// the webservice returns the data
-				
+
 				new  AsyncTask<Void, Void, List<CatalogInfo>>() {
 
 					@Override
 					protected List<CatalogInfo> doInBackground(Void... paramArrayOfVoid) {
-						return VideoSDK.getCatalogService().list();
+						try {
+
+							return AppContext.getSDK().getCatalogService().list(new CatalogListRequest());
+						} catch (Throwable e) {
+							Log.i(TAG, e.getMessage());
+							return null;
+						}
 					}
-					
+
 					@Override
 					protected void onPostExecute(List<CatalogInfo> paramList) {
 						super.onPostExecute(paramList);
-			
+
 						// 为ListView设置Adapter
 //						CatalogListViewAdapter listViewAdapter = null;
 						if ((!isCancelled()) && (paramList != null)) {
@@ -91,15 +101,15 @@ public class CatalogActivity extends Activity {
 							catalogListViewAdapter.setDataList(paramList);
 							pullRefreshListView.onRefreshComplete();
 							catalogListViewAdapter.notifyDataSetChanged();
-						
+
 						}  else{
 							pullRefreshListView.onRefreshComplete();
 						}
-						return; 
+						return;
 					}
-					
+
 				}.execute(new Void[] { null,null });
-			 
+
 			}
 		});
 		// 开启异步任务，用于从亦云视频下载视频分类
@@ -118,6 +128,7 @@ public class CatalogActivity extends Activity {
 		default:
 			break;
 		}
+
 		return super.onOptionsItemSelected(paramMenuItem);
 	}
 

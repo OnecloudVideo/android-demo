@@ -5,11 +5,15 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.pispower.AppContext;
 import com.pispower.R;
 import com.pispower.video.sdk.VideoSDK;
+import com.pispower.video.sdk.core.VideoSDKException;
 import com.pispower.video.sdk.video.VideoInfo;
+import com.pispower.video.sdk.video.request.VideoListRequest;
 
 public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 
@@ -52,7 +56,12 @@ public class LoadVideoTask extends AsyncTask<String, Void, List<VideoInfo>> {
 	protected List<VideoInfo> doInBackground(String... params) {
 		String catalogId = params[0];
 
-		return  new VideoSDK().getVideoService().list(catalogId);
+		try {
+			return  AppContext.getSDK().getVideoService().list(new VideoListRequest(catalogId));
+		} catch (VideoSDKException e) {
+			Log.i(TAG, e.getMessage());
+			return  null;
+		}
 	}
 
 }
