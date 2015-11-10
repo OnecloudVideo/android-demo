@@ -4,8 +4,8 @@
     <string name="startDemo">开始</string>
     <string name="title_activity_start">视频管家</string>
     <string name="demoIllustration">     
-       本应用程序是在android端，通过使用宏瑞视频所提供的Restful API，
-       获取宏瑞视频平台上的所有分类，并进入分类中，获取平台上此分类
+       本应用程序是在android端，通过使用鸿瑞视频所提供的Restful API，
+       获取鸿瑞视频平台上的所有分类，并进入分类中，获取平台上此分类
         中的所有视频及播放视频功能的使用实例。
     </string>
 
