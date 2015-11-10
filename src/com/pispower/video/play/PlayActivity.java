@@ -63,7 +63,7 @@ public class PlayActivity extends Activity implements
 		// 设置错误监听器，当发生错误时从屏幕上移除进度对话框，并结束本activity，返回到上一个activity。
 		videoView.setOnErrorListener(this);
 
-		// 获得http referer,此由用户在宏瑞视频平台白名单管理中所设定的url
+		// 获得http referer,此由用户白名单管理中所设定的url
 		String referer = this.getResources().getString(R.string.Referer);
 		Log.i("HTTP Referer", referer);
 		// 设置播放源uri及http Referer字段
