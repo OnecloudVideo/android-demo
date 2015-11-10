@@ -112,7 +112,7 @@ public class CatalogActivity extends Activity {
 
 			}
 		});
-		// 开启异步任务，用于从亦云视频下载视频分类
+		// 开启异步任务，用于从宏瑞视频下载视频分类
 		new LoadCatalogTask(this.progressDialog, 
 				this.listEmptyHintTextView,this.catalogListViewAdapter).execute(new Void[] { null,
 				null });
