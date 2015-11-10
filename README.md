@@ -1,5 +1,5 @@
 # 目的
-  演示如何在Android端使用宏瑞视频的 Restfu API.
+  演示如何在Android端使用鸿瑞视频的 Restfu API.
 
 # 快速开始
   <p>1.下载android-demo.</p>
